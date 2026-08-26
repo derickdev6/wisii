@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+:root {
+  --sea:      #f2f6f7;
+  --surface:  #ffffff;
+  --raised:   #f7fafb;
+  --line:     #dde6e9;
+  --line-soft:#eaf0f2;
+  --ink:      #0d2430;
+  --ink-soft: #40606d;
+  --muted:    #6d8894;
+  --accent:   #0d7d8c;
+  --accent-ink:#ffffff;
+  --coral:    #d1583f;
+  --sand:     #b8862f;
+  --island:   #e3ded2;
+  --island-line: #c3bba7;
+}
+
+:root:not([data-theme="light"]) {
+  @media (prefers-color-scheme: dark) {
+    --sea:      #071519;
+    --surface:  #0d2028;
+    --raised:   #122b34;
+    --line:     #1e3d47;
+    --line-soft:#173039;
+    --ink:      #e8f2f4;
+    --ink-soft: #a8c4cc;
+    --muted:    #6f909b;
+    --accent:   #3ec7c0;
+    --accent-ink:#06222a;
+    --coral:    #f4795c;
+    --sand:     #e0b455;
+    --island:   #1d3a3c;
+    --island-line: #2f5a58;
+  }
+}
+
+:root[data-theme="dark"] {
+  --sea:      #071519;
+  --surface:  #0d2028;
+  --raised:   #122b34;
+  --line:     #1e3d47;
+  --line-soft:#173039;
+  --ink:      #e8f2f4;
+  --ink-soft: #a8c4cc;
+  --muted:    #6f909b;
+  --accent:   #3ec7c0;
+  --accent-ink:#06222a;
+  --coral:    #f4795c;
+  --sand:     #e0b455;
+  --island:   #1d3a3c;
+  --island-line: #2f5a58;
+}
+
+html, body { height: 100%; }
+body {
+  background: var(--sea);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* tabulares para que las cifras de dinero no bailen */
+.num { font-variant-numeric: tabular-nums; }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--line); border-radius: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+.maplibregl-ctrl-attrib { font-size: 10px; }
+.maplibregl-popup-content { background: var(--surface); color: var(--ink); border-radius: 10px; }

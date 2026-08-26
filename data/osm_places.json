@@ -1,0 +1,930 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-08-26T20:58:55Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 306381625,
+  "lat": 12.5830104,
+  "lon": -81.6975682,
+  "tags": {
+    "divipola": "88001",
+    "name": "San Andrés",
+    "name:ar": "سان أندريس",
+    "name:az": "San Andres",
+    "name:bg": "Сан Андрес",
+    "name:ckb": "سان ئەندرێس",
+    "name:de": "San Andrés",
+    "name:en": "San Andrés",
+    "name:fa": "ایسلا ده سان آندرس",
+    "name:fi": "San Andrés",
+    "name:fr": "San Andrés",
+    "name:gl": "San Andrés",
+    "name:he": "סן אנדרס",
+    "name:hu": "San Andrés",
+    "name:it": "San Andrés",
+    "name:ko": "산안드레스",
+    "name:ku": "San Endirês",
+    "name:lt": "San Andresas",
+    "name:lv": "Sanandresa",
+    "name:nl": "San Andrés",
+    "name:pt": "San Andrés",
+    "name:ru": "Сан-Андрес",
+    "name:si": "සැන් ඇන්ඩ්‍රියාස්",
+    "name:tr": "San Andrés",
+    "name:uk": "Сан-Андрес",
+    "name:ur": "سان اندریس",
+    "name:vi": "San Andrés",
+    "name:zh": "圣安德烈斯",
+    "place": "city",
+    "population": "52733",
+    "source": "Landsat;OCHA Colombia 2010",
+    "wikidata": "Q134678",
+    "wikipedia": "es:San Andrés (San Andrés y Providencia)"
+  }
+},
+{
+  "type": "node",
+  "id": 306384198,
+  "lat": 12.5305017,
+  "lon": -81.7086410,
+  "tags": {
+    "name": "San Luis",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 306384404,
+  "lat": 12.5940740,
+  "lon": -81.7043652,
+  "tags": {
+    "name": "Punta Norte",
+    "natural": "cape",
+    "place": "locality"
+  }
+},
+{
+  "type": "node",
+  "id": 703497560,
+  "lat": 12.4944747,
+  "lon": -81.7327204,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Tylor Rock",
+    "note": "GEOPUNTO, PUNTO DE INTERES, db162134035da0d15001499829715470",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497562,
+  "lat": 12.4993468,
+  "lon": -81.7244274,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "TaSam",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 6e91ba49943e9c042b25bc429c5073a1",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497563,
+  "lat": 12.4991518,
+  "lon": -81.7325140,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Fisher Rock",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 1e1660ed921bd8142558e73d04e82014",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497564,
+  "lat": 12.5017364,
+  "lon": -81.7241970,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Cave Ground",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 154c7162363087afb0a4f952bf8dfbde",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497565,
+  "lat": 12.5004795,
+  "lon": -81.7314585,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Boobie Rock",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 2d0c1d2682131734b30710546738056b",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497566,
+  "lat": 12.4949774,
+  "lon": -81.7298226,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Lever South End",
+    "note": "GEOPUNTO, PUNTO DE INTERES, f338d5e19dc8c36077025e981acdef43",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497567,
+  "lat": 12.4871030,
+  "lon": -81.7314242,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "South End O Bowle's",
+    "note": "GEOPUNTO, PUNTO DE INTERES, a670c667a8d360eb50defe9670e80b29",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497569,
+  "lat": 12.4856255,
+  "lon": -81.7327077,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Zolaris",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 9e252d6d450b25e97931ce717d1341f3",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497571,
+  "lat": 12.5217591,
+  "lon": -81.7282211,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Cove Road",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 7cfe007d52faff8484611425c46821db",
+    "place": "hamlet",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497574,
+  "lat": 12.5057818,
+  "lon": -81.7224063,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Cotton Tree",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 8b2879430a2a0a59bf3be3a03e3d340c",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497575,
+  "lat": 12.5035634,
+  "lon": -81.7241511,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Santar Apple Line",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 4b9d8df3c818dacd5d3b57031dd31489",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497577,
+  "lat": 12.5192974,
+  "lon": -81.7271596,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Massally",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 1d302dda716869afcac591f58429b4a3",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497578,
+  "lat": 12.5154401,
+  "lon": -81.7185234,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Sound Bay Ground",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 751c2d4edfd45a922de76d9b9d90a457",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497580,
+  "lat": 12.5136278,
+  "lon": -81.7286998,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Bobby Rock",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 109e1b4d951b3d5fe1a3dc78bbc4d089",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497582,
+  "lat": 12.5030061,
+  "lon": -81.7293179,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Downs",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 426a3a4d1ba5b3adccc69a5174f1cf9d",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497586,
+  "lat": 12.5278863,
+  "lon": -81.7264859,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Lawrence South West",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 2f0bc6bcef9dd73e0a7305e930fa7395",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497587,
+  "lat": 12.5318044,
+  "lon": -81.7330454,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Suky Bay",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 27fdbe8c9c0d083c31e70857191f89b0",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497588,
+  "lat": 12.5325793,
+  "lon": -81.7208631,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Cove Gully",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 166f5699eae271ac889ffcd62ea01d32",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497591,
+  "lat": 12.5463112,
+  "lon": -81.7180619,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Jack Point",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 991d286b8cd50e1424756b08231b17a0",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497594,
+  "lat": 12.5430034,
+  "lon": -81.7229561,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Lever Hill",
+    "note": "GEOPUNTO, PUNTO DE INTERES, e4956ec53dc3bfc87aaf956ce6b4daaa",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497596,
+  "lat": 12.5365735,
+  "lon": -81.7175171,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Manuel Ground",
+    "note": "GEOPUNTO, PUNTO DE INTERES, b7214f1e10c9e9e6a7ff6054d351ed96",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497599,
+  "lat": 12.5391354,
+  "lon": -81.7212765,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Duppy Gully Road",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 91a96877693dfa11c3834fd676b0fc40",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497602,
+  "lat": 12.5413070,
+  "lon": -81.7168216,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Clay Maunt",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 59ddf3ce6578bb34375132d080f32129",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497603,
+  "lat": 12.5366680,
+  "lon": -81.7190412,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Manuel Pond",
+    "note": "GEOPUNTO, PUNTO DE INTERES, a1977b6a166397835a73bd064fae1b80",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497605,
+  "lat": 12.5391753,
+  "lon": -81.7279757,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Cover Hill",
+    "note": "GEOPUNTO, PUNTO DE INTERES, c81b9520b68fd60a417c9e722be47297",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497607,
+  "lat": 12.5318798,
+  "lon": -81.7139443,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Mony Ground",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 00e640300966097563f774251fe6482c",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497609,
+  "lat": 12.5394286,
+  "lon": -81.7112265,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Harmony Hall Hill",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 9e9520695ddb8fcbc761391bb801de5b",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497610,
+  "lat": 12.5416132,
+  "lon": -81.7149007,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia;SAN ANDRES Y PROVIDENCIA;San Andrés y Providencia",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 4607050501a515b579ec9b298eb9445e",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497616,
+  "lat": 12.5607714,
+  "lon": -81.7098261,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Los Corales",
+    "note": "GEOPUNTO, PUNTO DE INTERES, effa1e16ba951708001c3440cb273b79",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497617,
+  "lat": 12.5625535,
+  "lon": -81.7246299,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Lime Kilm",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 8635dcbbafeb15e4ff36e7ba09011346",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497618,
+  "lat": 12.5641504,
+  "lon": -81.7176832,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Mission Hill",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 4599e15b03d1250ac98b59d0991fe4ac",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497619,
+  "lat": 12.5542831,
+  "lon": -81.7141833,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Mariah Hill",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 219c6650404aebdaa1695474ebace73e",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497620,
+  "lat": 12.5633870,
+  "lon": -81.7161555,
+  "tags": {
+    "divipola": "88001",
+    "is_in:country": "Colombia",
+    "is_in:state": "San Andrés y Providencia",
+    "is_in:town": "San Andrés",
+    "name": "La Loma",
+    "note": "POBLACION, POBLACION, f0966ccd327aa5810586deb9e0655d20",
+    "place": "village",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497622,
+  "lat": 12.5576864,
+  "lon": -81.7098126,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Mount Pleasant",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 3ae2902a84437a6009b73c21dc5488c8",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497624,
+  "lat": 12.5535239,
+  "lon": -81.7156244,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Single Hill",
+    "note": "GEOPUNTO, PUNTO DE INTERES, f5bdec9ecc773e3ffaf762531f57232f",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497625,
+  "lat": 12.5573812,
+  "lon": -81.7303252,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Hawkins",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 8e93c00ecb14e8179c84e774355e33b4",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497626,
+  "lat": 12.5601678,
+  "lon": -81.7295072,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Brook's Botton",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 82290f8a339edb3d4ce95c7de943c3ce",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497627,
+  "lat": 12.5690797,
+  "lon": -81.7167523,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Brook's Back",
+    "note": "GEOPUNTO, PUNTO DE INTERES, f2fd095e4e7ac2a728ff761b9a1642b2",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497628,
+  "lat": 12.5705257,
+  "lon": -81.7153710,
+  "tags": {
+    "divipola": "88001",
+    "is_in": "Colombia;SAN ANDRES Y PROVIDENCIA;San Andrés y Providencia",
+    "name": "Tom",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 3c6d79125c9e330c3d78da8eb5db8fa0",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497629,
+  "lat": 12.5719359,
+  "lon": -81.7144518,
+  "tags": {
+    "divipola": "88001",
+    "is_in": "Colombia;SAN ANDRES Y PROVIDENCIA;San Andrés y Providencia",
+    "name": "Flower's Hill",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 06f64c64afc28625761afe19d2cfe04b",
+    "place": "neighbourhood",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497630,
+  "lat": 12.5735977,
+  "lon": -81.7206188,
+  "tags": {
+    "divipola": "88001",
+    "fixme": "Revisar: este punto fue creado por importación directa",
+    "is_in": "Colombia; SAN ANDRES Y PROVIDENCIA ; San Andrés y Providencia",
+    "name": "Morris Landing",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 4c08239d24eab403bd7658c3d52bb9a0",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703525783,
+  "lat": 12.5606875,
+  "lon": -81.7038548,
+  "tags": {
+    "fixme": "REVISAR: ESTE PUNTO FUE CREADO POR IMPORTACION DIRECTA",
+    "is_in": "COLOMBIA; OTROS ;",
+    "name": "Low Bight",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 6961b778e4d356ca0c668ead806d88ed",
+    "place": "locality",
+    "source": "OCHA COLOMBIA 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703525784,
+  "lat": 12.4987527,
+  "lon": -81.7205713,
+  "tags": {
+    "fixme": "REVISAR: ESTE PUNTO FUE CREADO POR IMPORTACION DIRECTA",
+    "is_in": "COLOMBIA; OTROS ;",
+    "name": "Old Sam",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 22b7c0620442e257a7b17a7bc7e02491",
+    "place": "hamlet",
+    "source": "OCHA COLOMBIA 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703525785,
+  "lat": 12.4823010,
+  "lon": -81.7306590,
+  "tags": {
+    "fixme": "REVISAR: ESTE PUNTO FUE CREADO POR IMPORTACION DIRECTA",
+    "is_in": "COLOMBIA; OTROS ;",
+    "name": "South End Villas",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 05feb14d957d00cc50ba4278e58e2aa3",
+    "place": "locality",
+    "source": "OCHA COLOMBIA 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703525787,
+  "lat": 12.5259624,
+  "lon": -81.7138779,
+  "tags": {
+    "fixme": "REVISAR: ESTE PUNTO FUE CREADO POR IMPORTACION DIRECTA",
+    "is_in": "COLOMBIA; OTROS ;",
+    "name": "Casion Call",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 0e4333380066fca0d6a3f9db3fc96eba",
+    "place": "locality",
+    "source": "OCHA COLOMBIA 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703525788,
+  "lat": 12.5641196,
+  "lon": -81.7075049,
+  "tags": {
+    "fixme": "REVISAR: ESTE PUNTO FUE CREADO POR IMPORTACION DIRECTA",
+    "is_in": "COLOMBIA; OTROS ;",
+    "name": "Heins Bight",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 33e4542eee2a736daaf3ecf9fa57beb2",
+    "place": "locality",
+    "source": "OCHA COLOMBIA 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703525789,
+  "lat": 12.5289774,
+  "lon": -81.7079467,
+  "tags": {
+    "fixme": "REVISAR: ESTE PUNTO FUE CREADO POR IMPORTACION DIRECTA",
+    "is_in": "COLOMBIA; OTROS ;",
+    "name": "Sterthenberg Point",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 32e9858d8042007a5c8ac8d66d3f33e9",
+    "place": "locality",
+    "source": "OCHA COLOMBIA 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703525790,
+  "lat": 12.5025350,
+  "lon": -81.7201762,
+  "tags": {
+    "fixme": "REVISAR: ESTE PUNTO FUE CREADO POR IMPORTACION DIRECTA",
+    "is_in": "COLOMBIA; OTROS ;",
+    "name": "Morras",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 8dd1bd51160c756318b9b6e5a84dfd69",
+    "place": "locality",
+    "source": "OCHA COLOMBIA 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703525792,
+  "lat": 12.4921022,
+  "lon": -81.7216996,
+  "tags": {
+    "fixme": "REVISAR: ESTE PUNTO FUE CREADO POR IMPORTACION DIRECTA",
+    "is_in": "COLOMBIA; OTROS ;",
+    "name": "Rock Point",
+    "note": "GEOPUNTO, PUNTO DE INTERES, be7b848df08b6cd136b2d036aea3b802",
+    "place": "locality",
+    "source": "OCHA COLOMBIA 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703525793,
+  "lat": 12.4965392,
+  "lon": -81.7207145,
+  "tags": {
+    "fixme": "REVISAR: ESTE PUNTO FUE CREADO POR IMPORTACION DIRECTA",
+    "is_in": "COLOMBIA; OTROS ;",
+    "name": "Tana",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 2ef823d5a3d9e41aa55e457adfd70aaf",
+    "place": "locality",
+    "source": "OCHA COLOMBIA 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703525796,
+  "lat": 12.5929690,
+  "lon": -81.7025093,
+  "tags": {
+    "fixme": "REVISAR: ESTE PUNTO FUE CREADO POR IMPORTACION DIRECTA",
+    "is_in": "COLOMBIA; OTROS ;",
+    "name": "German Point",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 8b8405152e8b33608e4ac06f4f587eb9",
+    "place": "locality",
+    "source": "OCHA COLOMBIA 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703525797,
+  "lat": 12.5801882,
+  "lon": -81.6954817,
+  "tags": {
+    "fixme": "REVISAR: ESTE PUNTO FUE CREADO POR IMPORTACION DIRECTA",
+    "is_in": "COLOMBIA; OTROS ;",
+    "name": "Sunrise Park",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 45a58131d3abe8fa69abcd7a67f72462",
+    "place": "locality",
+    "source": "OCHA COLOMBIA 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 3789861516,
+  "lat": 12.5683291,
+  "lon": -81.7102627,
+  "tags": {
+    "name": "Simpson Well",
+    "place": "neighbourhood"
+  }
+},
+{
+  "type": "node",
+  "id": 3789861517,
+  "lat": 12.5729423,
+  "lon": -81.7089424,
+  "tags": {
+    "name": "Barrio El Bight",
+    "place": "neighbourhood"
+  }
+},
+{
+  "type": "node",
+  "id": 3789861518,
+  "lat": 12.5712058,
+  "lon": -81.7111942,
+  "tags": {
+    "name": "La Paz",
+    "place": "neighbourhood"
+  }
+},
+{
+  "type": "node",
+  "id": 3789861519,
+  "lat": 12.5731804,
+  "lon": -81.7109759,
+  "tags": {
+    "name": "La Sagrada Familia",
+    "place": "neighbourhood"
+  }
+},
+{
+  "type": "node",
+  "id": 3789861520,
+  "lat": 12.5740257,
+  "lon": -81.7057435,
+  "tags": {
+    "name": "Barrio Obrero",
+    "place": "neighbourhood"
+  }
+},
+{
+  "type": "node",
+  "id": 3789861521,
+  "lat": 12.5793456,
+  "lon": -81.7111506,
+  "tags": {
+    "name": "Vista Hermosa",
+    "place": "neighbourhood"
+  }
+},
+{
+  "type": "node",
+  "id": 3789861523,
+  "lat": 12.5842296,
+  "lon": -81.7030136,
+  "tags": {
+    "name": "Swamp Ground",
+    "place": "neighbourhood"
+  }
+},
+{
+  "type": "node",
+  "id": 3789861524,
+  "lat": 12.5844782,
+  "lon": -81.7018347,
+  "tags": {
+    "name": "Cartagena Alegre",
+    "place": "neighbourhood"
+  }
+},
+{
+  "type": "node",
+  "id": 4053087908,
+  "lat": 12.5661031,
+  "lon": -81.7089187,
+  "tags": {
+    "place": "village"
+  }
+}
+
+  ]
+}

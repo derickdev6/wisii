@@ -1,0 +1,11 @@
+node_modules/
+.next/
+out/
+.env*.local
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+
+# CSV crudo: se regenera con npm run data:fetch
+data/contratos_raw.csv
+data/GOBERNACION_SAN_ANDRES_contratos_desde_2025-01-01.csv

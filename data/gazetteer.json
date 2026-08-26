@@ -1,0 +1,350 @@
+{
+ "_nota": "Coordenadas de barrios de San Andrés. 'src' indica procedencia: osm-place = nodo place de OpenStreetMap (fiable); aprox = ubicación a nivel de barrio colocada a mano (±300 m), suficiente para un mapa de calor pero NO para localizar direcciones. Editable a mano: corregir aquí y volver a correr scripts/build_data.py.",
+ "barrios": {
+  "La Loma": {
+   "lat": 12.56339,
+   "lon": -81.71616,
+   "src": "osm-place"
+  },
+  "Barrio Obrero": {
+   "lat": 12.57403,
+   "lon": -81.70574,
+   "src": "osm-place"
+  },
+  "San Luis": {
+   "lat": 12.5305,
+   "lon": -81.70864,
+   "src": "osm-place"
+  },
+  "Vista Hermosa": {
+   "lat": 12.57935,
+   "lon": -81.71115,
+   "src": "osm-place"
+  },
+  "Sound Bay": {
+   "lat": 12.51544,
+   "lon": -81.71852,
+   "src": "osm-place"
+  },
+  "Morris Landing": {
+   "lat": 12.5736,
+   "lon": -81.72062,
+   "src": "osm-place"
+  },
+  "Simpson Well": {
+   "lat": 12.56833,
+   "lon": -81.71026,
+   "src": "osm-place"
+  },
+  "Tom Hooker": {
+   "lat": 12.57053,
+   "lon": -81.71537,
+   "src": "osm-place"
+  },
+  "Swamp Ground": {
+   "lat": 12.58423,
+   "lon": -81.70301,
+   "src": "osm-place"
+  },
+  "El Bight": {
+   "lat": 12.57294,
+   "lon": -81.70894,
+   "src": "osm-place"
+  },
+  "La Paz": {
+   "lat": 12.57121,
+   "lon": -81.71119,
+   "src": "osm-place"
+  },
+  "Sagrada Familia": {
+   "lat": 12.57318,
+   "lon": -81.71098,
+   "src": "osm-place"
+  },
+  "Los Corales": {
+   "lat": 12.56077,
+   "lon": -81.70983,
+   "src": "osm-place"
+  },
+  "Mission Hill": {
+   "lat": 12.56415,
+   "lon": -81.71768,
+   "src": "osm-place"
+  },
+  "Cartagena Alegre": {
+   "lat": 12.58448,
+   "lon": -81.70183,
+   "src": "osm-place"
+  },
+  "Sunrise Park": {
+   "lat": 12.58019,
+   "lon": -81.69548,
+   "src": "osm-place"
+  },
+  "Cove Road": {
+   "lat": 12.52176,
+   "lon": -81.72822,
+   "src": "osm-place"
+  },
+  "Harmony Hall Hill": {
+   "lat": 12.53943,
+   "lon": -81.71123,
+   "src": "osm-place"
+  },
+  "Mount Pleasant": {
+   "lat": 12.55769,
+   "lon": -81.70981,
+   "src": "osm-place"
+  },
+  "Flowers Hill": {
+   "lat": 12.57194,
+   "lon": -81.71445,
+   "src": "osm-place"
+  },
+  "Sprat Bight": {
+   "lat": 12.58705,
+   "lon": -81.69522,
+   "src": "osm-place"
+  },
+  "Punta Hansa": {
+   "lat": 12.58105,
+   "lon": -81.68847,
+   "src": "osm-place"
+  },
+  "Brooks Hill": {
+   "lat": 12.56017,
+   "lon": -81.72951,
+   "src": "osm-place"
+  },
+  "Natania": {
+   "lat": 12.5765,
+   "lon": -81.706,
+   "src": "aprox"
+  },
+  "Sarie Bay": {
+   "lat": 12.5875,
+   "lon": -81.7055,
+   "src": "aprox"
+  },
+  "North End": {
+   "lat": 12.5835,
+   "lon": -81.7005,
+   "src": "aprox"
+  },
+  "Perry Hill": {
+   "lat": 12.5525,
+   "lon": -81.7175,
+   "src": "aprox"
+  },
+  "Back Road": {
+   "lat": 12.548,
+   "lon": -81.7215,
+   "src": "aprox"
+  },
+  "School House": {
+   "lat": 12.5645,
+   "lon": -81.714,
+   "src": "aprox"
+  },
+  "Rock Hole": {
+   "lat": 12.5665,
+   "lon": -81.707,
+   "src": "aprox"
+  },
+  "Pueblo Viejo": {
+   "lat": 12.5555,
+   "lon": -81.7205,
+   "src": "aprox"
+  },
+  "Campo Hermoso": {
+   "lat": 12.579,
+   "lon": -81.7075,
+   "src": "aprox"
+  },
+  "Las Gaviotas": {
+   "lat": 12.582,
+   "lon": -81.706,
+   "src": "aprox"
+  },
+  "Las Palmas": {
+   "lat": 12.58,
+   "lon": -81.7045,
+   "src": "aprox"
+  },
+  "Barrack": {
+   "lat": 12.55439,
+   "lon": -81.71746,
+   "src": "aprox"
+  },
+  "The Cove": {
+   "lat": 12.535,
+   "lon": -81.727,
+   "src": "aprox"
+  },
+  "Orange Hill": {
+   "lat": 12.5455,
+   "lon": -81.723,
+   "src": "aprox"
+  },
+  "Schooner Bight": {
+   "lat": 12.558,
+   "lon": -81.702,
+   "src": "aprox"
+  },
+  "Slave Hill": {
+   "lat": 12.56,
+   "lon": -81.715,
+   "src": "aprox"
+  },
+  "Cocal": {
+   "lat": 12.535,
+   "lon": -81.713,
+   "src": "aprox"
+  },
+  "Buenos Aires": {
+   "lat": 12.577,
+   "lon": -81.7085,
+   "src": "aprox"
+  },
+  "Serranilla": {
+   "lat": 12.579,
+   "lon": -81.703,
+   "src": "aprox"
+  },
+  "San Felipe": {
+   "lat": 12.576,
+   "lon": -81.711,
+   "src": "aprox"
+  },
+  "Modelo": {
+   "lat": 12.581,
+   "lon": -81.707,
+   "src": "aprox"
+  },
+  "Los Almendros": {
+   "lat": 12.57775,
+   "lon": -81.70129,
+   "src": "aprox"
+  },
+  "Little Hill": {
+   "lat": 12.54245,
+   "lon": -81.71184,
+   "src": "aprox"
+  },
+  "Juan XXIII": {
+   "lat": 12.58304,
+   "lon": -81.70324,
+   "src": "aprox"
+  },
+  "La Montaña": {
+   "lat": 12.551,
+   "lon": -81.719,
+   "src": "aprox"
+  },
+  "Elsy Bar": {
+   "lat": 12.5825,
+   "lon": -81.7045,
+   "src": "aprox"
+  }
+ },
+ "alias": {
+  "LOMA": "La Loma",
+  "LA LOMA": "La Loma",
+  "THE HILL": "La Loma",
+  "LOMA BARRACK": "Barrack",
+  "LOMA BARACK": "Barrack",
+  "BARACK": "Barrack",
+  "BARRACK": "Barrack",
+  "LOMA COVE": "The Cove",
+  "COVE": "The Cove",
+  "THE COVE": "The Cove",
+  "COVE ROAD": "Cove Road",
+  "LOMA PERRY HILL": "Perry Hill",
+  "PERRY HILL": "Perry Hill",
+  "LOMA PERRY": "Perry Hill",
+  "LOMA BROOKS HILL": "Brooks Hill",
+  "BROOKS HILL": "Brooks Hill",
+  "BROOKS": "Brooks Hill",
+  "LOMA LINVAL": "La Loma",
+  "LINVAL": "La Loma",
+  "LOMA SCHOOL HOUSE": "School House",
+  "SCHOOL HOUSE": "School House",
+  "SCHOOLHOUSE": "School House",
+  "SARIE BAY": "Sarie Bay",
+  "SARIE": "Sarie Bay",
+  "SARY BAY": "Sarie Bay",
+  "SARIEBAY": "Sarie Bay",
+  "OBRERO": "Barrio Obrero",
+  "BARRIO OBRERO": "Barrio Obrero",
+  "SAN LUIS": "San Luis",
+  "SAN LUIS GROUND ROAD": "San Luis",
+  "SAN LUIS BAY": "San Luis",
+  "SAN LUIS HOOPHIE": "San Luis",
+  "SAN LUIS TOM HOOKER": "Tom Hooker",
+  "SAN LUIS SOUND BAY": "Sound Bay",
+  "SOUND BAY": "Sound Bay",
+  "SOUNDBAY": "Sound Bay",
+  "TOM HOOKER": "Tom Hooker",
+  "HOOKER": "Tom Hooker",
+  "PUEBLO VIEJO": "Pueblo Viejo",
+  "NATANIA": "Natania",
+  "ALTOS DE NATANIA": "Natania",
+  "MODELO": "Modelo",
+  "BARRIO MODELO": "Modelo",
+  "SIMPSON WELL": "Simpson Well",
+  "SIMPSONWELL": "Simpson Well",
+  "SIMPSON": "Simpson Well",
+  "SWAMP GROUND": "Swamp Ground",
+  "SWAMPGROUND": "Swamp Ground",
+  "ROCK HOLE": "Rock Hole",
+  "ROCKHOLE": "Rock Hole",
+  "BACK ROAD": "Back Road",
+  "BACKROAD": "Back Road",
+  "MORRIS LANDING": "Morris Landing",
+  "MORRIS": "Morris Landing",
+  "CAMPO HERMOSO": "Campo Hermoso",
+  "VISTA HERMOSA": "Vista Hermosa",
+  "LAS GAVIOTAS": "Las Gaviotas",
+  "GAVIOTAS": "Las Gaviotas",
+  "LAS PALMAS": "Las Palmas",
+  "PALMAS": "Las Palmas",
+  "NORTH END": "North End",
+  "NORTHEND": "North End",
+  "CENTRO": "North End",
+  "SPRAT BIGHT": "Sprat Bight",
+  "SPRATT BIGHT": "Sprat Bight",
+  "EL BIGHT": "El Bight",
+  "BIGHT": "El Bight",
+  "ORANGE HILL": "Orange Hill",
+  "SCHOONER BIGHT": "Schooner Bight",
+  "SCHOONER": "Schooner Bight",
+  "SLAVE HILL": "Slave Hill",
+  "COCAL": "Cocal",
+  "EL COCAL": "Cocal",
+  "BUENOS AIRES": "Buenos Aires",
+  "SERRANILLA": "Serranilla",
+  "SAN FELIPE": "San Felipe",
+  "LOS ALMENDROS": "Los Almendros",
+  "ALMENDROS": "Los Almendros",
+  "LITTLE HILL": "Little Hill",
+  "JUAN XXIII": "Juan XXIII",
+  "JUAN 23": "Juan XXIII",
+  "LA MONTANA": "La Montaña",
+  "MONTANA": "La Montaña",
+  "ELSY BAR": "Elsy Bar",
+  "ELSYBAR": "Elsy Bar",
+  "FLOWERS HILL": "Flowers Hill",
+  "FLOWER HILL": "Flowers Hill",
+  "LA PAZ": "La Paz",
+  "SAGRADA FAMILIA": "Sagrada Familia",
+  "LA SAGRADA FAMILIA": "Sagrada Familia",
+  "LOS CORALES": "Los Corales",
+  "MISSION HILL": "Mission Hill",
+  "CARTAGENA ALEGRE": "Cartagena Alegre",
+  "SUNRISE PARK": "Sunrise Park",
+  "HARMONY HALL HILL": "Harmony Hall Hill",
+  "HARMONY HALL": "Harmony Hall Hill",
+  "MOUNT PLEASANT": "Mount Pleasant",
+  "PUNTA HANSA": "Punta Hansa"
+ }
+}
