@@ -7,15 +7,21 @@ import csv, io, os, sys, urllib.parse, urllib.request
 
 DATASET = "jbjy-vk9h"                 # SECOP II - Contratos Electrónicos
 NIT     = "892400038"                 # GOBERNACIÓN ... SAN ANDRES PROVIDENCIA Y SANTA CATALINA
-DESDE   = "2025-01-01T00:00:00.000"
 CAMPO_FECHA = "fecha_de_firma"
 PAGE    = 2000
+
+# Se trae todo el histórico. El único filtro es exigir fecha de firma:
+# los 2.265 registros sin ella están todos en estados previos a la firma
+# (Borrador, Cancelado, enviado Proveedor, En aprobación) y traen valores
+# corruptos — hay borradores por encima de $1.000 billones COP, mil veces
+# el PIB del país. Filtrarlos por fecha elimina los dos problemas a la vez.
+FILTRO = f"nit_entidad='{NIT}' AND {CAMPO_FECHA} IS NOT NULL"
 OUT     = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data",
                        "contratos_raw.csv")
 
 def page(offset, token):
     params = {
-        "$where":  f"nit_entidad='{NIT}' AND {CAMPO_FECHA} >= '{DESDE}'",
+        "$where":  FILTRO,
         "$order":  f"{CAMPO_FECHA} ASC, id_contrato ASC",
         "$limit":  PAGE,
         "$offset": offset,

@@ -76,13 +76,13 @@ export default function Page() {
 
         <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
           <Tarjeta etiqueta="Contratos" valor={numero(meta.contratos)}
-                   nota={`${numero(meta.proveedores)} proveedores distintos`} />
+                   nota={`${numero(meta.por_fuente["SECOP II"] ?? 0)} en SECOP II · ${numero(meta.por_fuente["SECOP I"] ?? 0)} en SECOP I`} />
           <Tarjeta etiqueta="Valor contratado" valor={copCorto(meta.valor_total)}
                    nota="suma de valor_del_contrato" />
           <Tarjeta etiqueta="Contrato mediano" valor={copCorto(meta.valor_mediano)}
                    nota="la mitad de los contratos está por debajo" />
           <Tarjeta etiqueta="Ubicados en el mapa" valor={`${(meta.geo.cobertura * 100).toFixed(1)}%`}
-                   nota={`${numero(meta.geo.con_barrio)} en ${meta.geo.barrios_ubicados} barrios`} />
+                   nota={`${numero(meta.geo.con_barrio)} de ${numero(meta.geo.mapeables)} con domicilio publicado`} />
         </div>
 
         <nav className="mt-5 flex gap-1 rounded-lg border p-1 text-sm"
@@ -112,11 +112,18 @@ export default function Page() {
 
       <footer className="mt-8 border-t pt-4 text-[11px] leading-relaxed"
               style={{ borderColor: "var(--line)", color: "var(--muted)" }}>
-        Datos abiertos de <a href="https://www.datos.gov.co/d/jbjy-vk9h" target="_blank"
-           rel="noopener noreferrer" className="underline">datos.gov.co (SECOP II)</a>.
+        Datos abiertos de datos.gov.co:{" "}
+        <a href="https://www.datos.gov.co/d/jbjy-vk9h" target="_blank"
+           rel="noopener noreferrer" className="underline">SECOP II</a>{" "}
+        (2020-2026) y{" "}
+        <a href="https://www.datos.gov.co/d/f789-7hwg" target="_blank"
+           rel="noopener noreferrer" className="underline">SECOP I</a>{" "}
+        (2015-2022).
         Contorno de la isla © OpenStreetMap. El mapa ubica el <strong>domicilio del
         representante legal del contratista</strong>, no el lugar de ejecución del contrato:
-        el SECOP registra los {numero(meta.contratos)} contratos en la misma dirección.
+        el SECOP registra todos los contratos en la misma dirección, y SECOP I ni siquiera
+        publica ese campo. Se descartaron {meta.duplicados_descartados} registros que
+        aparecían en ambos sistemas con el mismo contratista, fecha y valor.
         El campo <code>valor_pagado</code> se omite en esta visualización porque solo{" "}
         {meta.con_pago_reportado} de {numero(meta.contratos)} contratos lo reportan: mostrarlo
         sugeriría una ejecución cercana a cero que el dato no respalda.

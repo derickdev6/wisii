@@ -18,10 +18,18 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Descargar contratos de datos.gov.co
+      - name: Descargar contratos de SECOP II
         env:
           SODA_APP_TOKEN: ${{ secrets.SODA_APP_TOKEN }}
         run: python3 scripts/fetch_data.py
+
+      # SECOP I es un sistema cerrado (2015-2022): no cambia, pero se re-descarga
+      # por si hay correcciones retroactivas. La consulta es lenta.
+      - name: Descargar contratos de SECOP I
+        env:
+          SODA_APP_TOKEN: ${{ secrets.SODA_APP_TOKEN }}
+        run: python3 scripts/fetch_secop1.py
+        continue-on-error: true
 
       # El contorno de la isla no cambia: se regenera solo a mano (scripts/fetch_geo.py)
       # para no golpear Overpass cada semana.

@@ -54,6 +54,7 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
   barrioInicial?: string | null;
 }) {
   const [q, setQ] = useState("");
+  const [fuente, setFuente] = useState("");
   const [estado, setEstado] = useState("");
   const [tipo, setTipo] = useState("");
   const [modalidad, setModalidad] = useState("");
@@ -66,6 +67,7 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
   const qd = useDeferredValue(q);
 
   const opciones = useMemo(() => ({
+    fuente: unicos(contratos, (c) => c.fuente),
     estado: unicos(contratos, (c) => c.estado),
     tipo: unicos(contratos, (c) => c.tipo),
     modalidad: unicos(contratos, (c) => c.modalidad),
@@ -78,6 +80,7 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
     const min = minValor ? Number(minValor) : 0;
 
     const out = contratos.filter((c) => {
+      if (fuente && c.fuente !== fuente) return false;
       if (estado && c.estado !== estado) return false;
       if (tipo && c.tipo !== tipo) return false;
       if (modalidad && c.modalidad !== modalidad) return false;
@@ -96,7 +99,7 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
       "valor-asc": (a, b) => a.valor - b.valor,
     };
     return out.sort(cmp[orden]);
-  }, [contratos, qd, estado, tipo, modalidad, barrio, desde, hasta, minValor, orden]);
+  }, [contratos, qd, fuente, estado, tipo, modalidad, barrio, desde, hasta, minValor, orden]);
 
   const total = useMemo(() => filtrados.reduce((s, c) => s + c.valor, 0), [filtrados]);
 
@@ -115,17 +118,17 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
   }, []);
 
   useEffect(() => { scroller.current?.scrollTo({ top: 0 }); setScrollTop(0); },
-    [qd, estado, tipo, modalidad, barrio, desde, hasta, minValor, orden]);
+    [qd, fuente, estado, tipo, modalidad, barrio, desde, hasta, minValor, orden]);
 
   const primera = Math.max(0, Math.floor(scrollTop / ALTO) - COLCHON);
   const ultima = Math.min(filtrados.length, Math.ceil((scrollTop + alto) / ALTO) + COLCHON);
   const visibles = filtrados.slice(primera, ultima);
 
   const limpiar = () => {
-    setQ(""); setEstado(""); setTipo(""); setModalidad(""); setBarrio("");
+    setQ(""); setFuente(""); setEstado(""); setTipo(""); setModalidad(""); setBarrio("");
     setDesde(""); setHasta(""); setMinValor("");
   };
-  const hayFiltro = q || estado || tipo || modalidad || barrio || desde || hasta || minValor;
+  const hayFiltro = q || fuente || estado || tipo || modalidad || barrio || desde || hasta || minValor;
 
   return (
     <div className="flex h-[74vh] min-h-[520px] flex-col gap-3">
@@ -146,7 +149,8 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
           )}
         </div>
 
-        <div className="mt-3 grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-7">
+        <div className="mt-3 grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-8">
+          <Selector etiqueta="Fuente" valor={fuente} onChange={setFuente} opciones={opciones.fuente} />
           <Selector etiqueta="Estado" valor={estado} onChange={setEstado} opciones={opciones.estado} />
           <Selector etiqueta="Tipo" valor={tipo} onChange={setTipo} opciones={opciones.tipo} />
           <Selector etiqueta="Modalidad" valor={modalidad} onChange={setModalidad} opciones={opciones.modalidad} />
@@ -224,6 +228,7 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
                     {c.duracion && <Chip>{c.duracion}</Chip>}
                     <Chip>{c.destino}</Chip>
                     {c.barrio && <Chip>{c.barrio}</Chip>}
+                    {c.fuente === "SECOP I" && <Chip tono="alerta">SECOP I</Chip>}
                     <span className="num text-[11px]" style={{ color: "var(--muted)" }}>
                       {fecha(c.firma)}
                     </span>

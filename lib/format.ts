@@ -33,7 +33,10 @@ export function mes(iso: string): string {
   return `${MESES[Number(m) - 1]} ${y}`;
 }
 
-export const secopUrl = (notice: string) =>
-  notice
-    ? `https://community.secop.gov.co/Public/Tendering/OpportunityDetail/Index?noticeUID=${notice}&isFromPublicArea=True&isModal=False`
-    : null;
+/** Cada sistema tiene su propio detalle público. */
+export function secopUrl(fuente: string, enlace: string): string | null {
+  if (!enlace) return null;
+  return fuente === "SECOP I"
+    ? `https://www.contratos.gov.co/consultas/detalleProceso.do?numConstancia=${enlace}`
+    : `https://community.secop.gov.co/Public/Tendering/OpportunityDetail/Index?noticeUID=${enlace}&isFromPublicArea=True&isModal=False`;
+}

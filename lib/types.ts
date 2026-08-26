@@ -1,18 +1,24 @@
 /** Formato del archivo public/data/contratos.json (codificado con diccionarios). */
 export interface ContratosRaw {
   campos: string[];
+  /** prefijo constante de id recortado de cada fila, por fuente */
+  pref: Record<string, string>;
   dic: {
-    estado: string[]; tipo: string[]; modalidad: string[];
+    fuente: string[]; estado: string[]; tipo: string[]; modalidad: string[];
     proveedor: string[]; origen: string[]; destino: string[]; barrio: string[];
+    objeto: string[]; duracion: string[]; domicilio: string[];
   };
   filas: (string | number)[][];
 }
 
 /** Una fila ya decodificada. */
+export type Fuente = "SECOP II" | "SECOP I";
+
 export interface Contrato {
   i: number;
   id: string;
-  ref: string;
+  /** SECOP I no publica domicilio del contratista: nunca tiene barrio */
+  fuente: Fuente;
   estado: string;
   tipo: string;
   modalidad: string;
@@ -28,7 +34,7 @@ export interface Contrato {
   domicilio: string;
   origen: string;
   destino: string;
-  notice: string;
+  enlace: string;
   /** objeto + proveedor + ref + documento, normalizado, para la búsqueda */
   busq: string;
 }
@@ -39,6 +45,8 @@ export interface Meta {
   nit: string;
   fuente: string;
   contratos: number;
+  por_fuente: Record<string, number>;
+  duplicados_descartados: number;
   valor_total: number;
   valor_mediano: number;
   valor_pagado: number;
@@ -49,7 +57,10 @@ export interface Meta {
   hasta: string;
   por_mes: Record<string, number>;
   geo: {
-    con_barrio: number; sin_dato: number; no_reconocido: number;
+    con_barrio: number;
+    /** contratos que traen el campo domicilio (solo SECOP II) */
+    mapeables: number;
+    cobertura_total: number; sin_dato: number; no_reconocido: number;
     cobertura: number; barrios_ubicados: number; barrios_aprox: number;
   };
   /** domicilios que ningún alias reconoce; insumo del editor de barrios */

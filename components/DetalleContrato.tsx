@@ -22,7 +22,7 @@ export default function DetalleContrato({ c, onCerrar }: { c: Contrato; onCerrar
     return () => { window.removeEventListener("keydown", esc); document.body.style.overflow = ""; };
   }, [onCerrar]);
 
-  const url = secopUrl(c.notice);
+  const url = secopUrl(c.fuente, c.enlace);
   const pct = c.valor > 0 ? Math.min(100, (c.pagado / c.valor) * 100) : 0;
 
   return (
@@ -37,6 +37,10 @@ export default function DetalleContrato({ c, onCerrar }: { c: Contrato; onCerrar
             <div className="flex flex-wrap items-center gap-1.5">
               <Chip tono={c.estado === "En ejecución" ? "ok" : "neutro"}>{c.estado}</Chip>
               <Chip>{c.tipo}</Chip>
+              <Chip tono={c.fuente === "SECOP I" ? "alerta" : "neutro"}
+                    title={c.fuente === "SECOP I"
+                      ? "Sistema anterior: no publica domicilio del contratista ni ejecución de pagos"
+                      : "Sistema vigente"}>{c.fuente}</Chip>
               {c.barrio && <Chip>{c.barrio}</Chip>}
             </div>
             <h2 className="mt-2 text-lg font-semibold leading-tight">{c.proveedor}</h2>
@@ -95,7 +99,8 @@ export default function DetalleContrato({ c, onCerrar }: { c: Contrato; onCerrar
             <Campo k="Origen de recursos" v={c.origen} />
             <Campo k="Destino del gasto" v={c.destino} />
             <Campo k="Documento del proveedor" v={c.documento} mono />
-            <Campo k="Domicilio del rep. legal" v={c.domicilio} />
+            <Campo k="Domicilio del rep. legal"
+                   v={c.fuente === "SECOP I" ? "no publicado en SECOP I" : c.domicilio} />
             <Campo k="ID del contrato" v={c.id} mono />
           </dl>
 
@@ -103,7 +108,7 @@ export default function DetalleContrato({ c, onCerrar }: { c: Contrato; onCerrar
             <a href={url} target="_blank" rel="noopener noreferrer"
                className="mt-5 inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium"
                style={{ background: "var(--accent)", color: "var(--accent-ink)" }}>
-              Ver en SECOP II ↗
+              {`Ver en ${c.fuente} ↗`}
             </a>
           )}
         </div>

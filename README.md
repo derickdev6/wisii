@@ -1,27 +1,48 @@
 # Contratación de la Gobernación de San Andrés
 
-Visualización de los contratos firmados por la **Gobernación del Departamento Archipiélago
-de San Andrés, Providencia y Santa Catalina** (NIT 892400038) desde el 1 de enero de 2025,
-a partir de los datos abiertos del SECOP II publicados en `datos.gov.co`.
+Visualización de la contratación de la **Gobernación del Departamento Archipiélago
+de San Andrés, Providencia y Santa Catalina** (NIT 892400038), a partir de los datos
+abiertos de `datos.gov.co`. Cubre **37.955 contratos entre marzo de 2015 y agosto de 2026**,
+uniendo los dos sistemas de contratación pública del país.
 
 Tres vistas: mapa de calor, listado con búsqueda integral, y un editor para corregir la
 ubicación de los barrios.
 
+## Las dos fuentes
+
+| | SECOP II | SECOP I |
+|---|---|---|
+| Dataset | `jbjy-vk9h` | `f789-7hwg` |
+| Período | jun 2020 – ago 2026 | mar 2015 – sep 2022 |
+| Contratos | 31.975 | 5.980 |
+| Identificación de la entidad | por NIT | solo por nombre (el NIT figura como "No Definido") |
+| Domicilio del contratista | sí | **no existe el campo** |
+| Ejecución de pagos | sí (casi nunca diligenciada) | no se publica |
+
+Los dos sistemas no comparten identificador de contrato. En el solape de 2020 se
+descartaron **115 registros** que aparecían en ambos con el mismo contratista, fecha de
+firma y valor. Los valores de tipo y modalidad que solo diferían en mayúsculas
+("Prestación de servicios" vs "Prestación de Servicios") se unifican al deletreo más
+frecuente para que los filtros no queden partidos en dos.
+
 ## Lo que hay que saber antes de leer el mapa
 
-**Los contratos del SECOP no traen coordenadas.** Los 9.614 registros figuran ejecutándose
-en la misma dirección — la sede de la Gobernación, en el Edificio Coral Palace. Un mapa de
-"un punto por contrato" sería 9.614 puntos apilados en un píxel.
+**Los contratos del SECOP no traen coordenadas.** En SECOP II los 31.975 registros figuran
+ejecutándose en la misma dirección — la sede de la Gobernación, en el Edificio Coral
+Palace. Un mapa de "un punto por contrato" sería un solo píxel.
 
 El único campo con variación geográfica real es `domicilio_representante_legal`: dónde vive
 el representante legal del contratista. El mapa de calor muestra **eso**, y no el lugar de
-ejecución del contrato. Con esa base:
+ejecución del contrato. SECOP I no publica ese campo, así que sus 5.980 contratos no pueden
+ubicarse nunca.
 
 | | |
 |---|---|
-| Contratos ubicables | ~45% |
-| Sin domicilio útil (`NO DEFINIDO`) | ~35% |
-| Domicilio presente pero no reconocido | ~20% |
+| Contratos con el campo domicilio (SECOP II) | 31.975 |
+| De ellos, ubicados en un barrio | 14.731 (46.1%) |
+| Sin domicilio útil (`NO DEFINIDO`) | 10.760 |
+| Domicilio presente pero no reconocido | 6.484 |
+| Cobertura sobre el total de 37.955 | 38.8% |
 | Barrios con coordenada de OpenStreetMap | 23 de 49 |
 | Barrios con coordenada aproximada (±300 m) | 26 de 49 |
 
@@ -30,11 +51,12 @@ ni para localizar direcciones.
 
 Dos campos más que conviene no malinterpretar:
 
-- **`valor_pagado` se omite deliberadamente.** Solo 10 de 9.614 contratos lo reportan
-  (incluso entre los 3.316 "Cerrado", solo 9). Graficarlo sugeriría una ejecución cercana
-  a cero que el dato no respalda.
-- **`referencia_del_contrato` es idéntico a `id_contrato`** en el 100% de las filas, así que
-  no se muestra como campo aparte.
+- **`valor_pagado` se omite deliberadamente.** Solo 30 de 37.955 contratos lo
+  reportan. Graficarlo sugeriría una ejecución cercana a cero que el dato no respalda.
+- **Los registros sin fecha de firma quedan fuera.** En SECOP II son 2.265 y están todos en
+  estados previos a la firma (Borrador, Cancelado, enviado Proveedor, En aprobación), con
+  valores corruptos: hay borradores por encima de $1.000 billones COP, mil veces el PIB del
+  país. Exigir fecha de firma elimina los dos problemas a la vez.
 
 ## Cómo correrlo
 
@@ -44,8 +66,9 @@ npm run data:all
 npm run dev
 ```
 
-`data:all` descarga el CSV desde datos.gov.co, baja el contorno de la isla desde
-OpenStreetMap y genera los JSON en `public/data/`. Los JSON ya vienen commiteados, así que
+`data:all` descarga los CSV de los dos datasets, baja el contorno de la isla desde
+OpenStreetMap y genera los JSON en `public/data/`. La consulta de SECOP I tarda varios
+minutos: `nombre_entidad` no está indexado en ese dataset. Los JSON ya vienen commiteados, así que
 `npm run dev` funciona sin ese paso.
 
 Para la descarga conviene un token de Socrata (gratis, evita el rate limit):
@@ -94,20 +117,24 @@ redespliegue. Requiere un secret `SODA_APP_TOKEN` en el repo
 ## Estructura
 
 ```
-scripts/fetch_data.py      descarga el CSV del SECOP (paginado, deduplicado)
+scripts/fetch_data.py      descarga SECOP II (paginado, deduplicado)
+scripts/fetch_secop1.py    descarga SECOP I (una sola consulta, lenta)
 scripts/fetch_geo.py       contorno de la isla desde Overpass, cosido y simplificado
 scripts/geocode_barrios.py geocodificación inicial contra OSM/Nominatim
-scripts/build_data.py      CSV + gazetteer -> public/data/*.json
+scripts/build_data.py      une ambas fuentes + gazetteer -> public/data/*.json
 data/gazetteer.json        barrios y alias — editable a mano o desde el editor
 app/, components/, lib/    la aplicación Next.js
 ```
 
-Los JSON que consume el navegador van codificados con diccionarios: 3,6 MB en crudo,
-~950 KB comprimidos, y se cargan una sola vez para que la búsqueda sobre los 9.614
-contratos sea instantánea sin backend.
+Los JSON que consume el navegador van codificados con diccionarios (el objeto del contrato
+solo se representa una vez y los prefijos constantes de id se guardan aparte): 10,6 MB en
+crudo, ~1,9 MB comprimidos. Se cargan una sola vez — medido en el navegador, 78 ms de
+descarga y parseo más 72 ms para construir el índice de búsqueda — y así el filtrado sobre
+los 37.955 contratos es instantáneo sin backend.
 
 ## Fuentes
 
-- Contratos: [datos.gov.co, dataset `jbjy-vk9h`](https://www.datos.gov.co/d/jbjy-vk9h) (SECOP II)
+- Contratos: [dataset `jbjy-vk9h`](https://www.datos.gov.co/d/jbjy-vk9h) (SECOP II) y
+  [dataset `f789-7hwg`](https://www.datos.gov.co/d/f789-7hwg) (SECOP I), en datos.gov.co
 - Contorno de la isla y ubicación de barrios: © OpenStreetMap contributors (ODbL)
 - Imagen satelital del editor: © Esri, Maxar, Earthstar Geographics

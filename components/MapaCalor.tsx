@@ -279,12 +279,16 @@ export default function MapaCalor({
             </div>
             <Nota>
               <strong>Cómo leer este mapa.</strong> Los contratos del SECOP no traen
-              coordenadas: los {numero(meta.contratos)} figuran ejecutándose en la misma
-              dirección (la sede de la Gobernación). Lo único con variación geográfica es
-              el domicilio del representante legal, y solo{" "}
-              <strong>{(cobertura * 100).toFixed(1)}%</strong> pudo ubicarse
-              ({numero(meta.geo.sin_dato)} sin domicilio y{" "}
-              {numero(meta.geo.no_reconocido)} con texto no reconocido).
+              coordenadas: todos figuran ejecutándose en la misma dirección (la sede de la
+              Gobernación). Lo único con variación geográfica es el domicilio del
+              representante legal, y solo lo publica SECOP II — los{" "}
+              {numero(meta.contratos - meta.geo.mapeables)} contratos de SECOP I
+              (2015-2022) no pueden ubicarse nunca. De los{" "}
+              {numero(meta.geo.mapeables)} que sí traen el campo se ubicó el{" "}
+              <strong>{(cobertura * 100).toFixed(1)}%</strong>
+              {" "}({numero(meta.geo.sin_dato)} sin domicilio y{" "}
+              {numero(meta.geo.no_reconocido)} con texto no reconocido), o sea{" "}
+              {(meta.geo.cobertura_total * 100).toFixed(1)}% del total.
               Además {meta.geo.barrios_aprox} de {meta.geo.barrios_ubicados} barrios
               tienen ubicación aproximada. Sirve para ver concentración relativa, no para
               medir montos por zona.
