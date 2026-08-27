@@ -27,6 +27,8 @@ export default async function Portada() {
   ]);
 
   const anios = Number(meta.hasta.slice(0, 4)) - Number(meta.desde.slice(0, 4));
+  // el listado abre con el rango de la ventana ya aplicado
+  const urlDelMes = `/contratos?desde=${rec.desde}&hasta=${rec.hasta}&orden=valor-desc`;
 
   return (
     <main>
@@ -83,7 +85,7 @@ export default async function Portada() {
                 style={{ background: "var(--cta)", color: "var(--cta-ink)" }}>
             Explorar los {numero(meta.contratos)} contratos →
           </Link>
-          <Link href="/contratos"
+          <Link href="/contratos?v=mapa"
                 className="rounded-xl border px-5 py-3 text-sm font-semibold transition hover:opacity-80"
                 style={{ borderColor: "var(--line)", color: "var(--ink)" }}>
             Ver el mapa de calor
@@ -181,8 +183,9 @@ export default async function Portada() {
             <span style={{ color: "var(--muted)" }}>
               Se muestran los 8 de mayor valor de {numero(rec.n)}.
             </span>
-            <Link href="/contratos" className="font-semibold underline underline-offset-4"
-                  style={{ color: "var(--accent)" }}>
+            <Link href={urlDelMes}
+                  className="rounded-lg px-4 py-2 font-semibold transition hover:opacity-90"
+                  style={{ background: "var(--cta)", color: "var(--cta-ink)" }}>
               Ver los {numero(rec.n)} contratos del mes →
             </Link>
           </div>

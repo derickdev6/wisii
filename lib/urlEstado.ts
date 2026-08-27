@@ -36,7 +36,7 @@ const CLAVES: Record<keyof Filtros, string> = {
   minValor: "min", orden: "orden",
 };
 
-const VISTAS: Vista[] = ["mapa", "contratos", "editor"];
+const VISTAS: Vista[] = ["contratos", "mapa", "editor"];
 const ORDENES: Orden[] = ["firma-desc", "firma-asc", "valor-desc", "valor-asc"];
 
 export function leerFiltros(sp: URLSearchParams): Filtros {
@@ -49,11 +49,10 @@ export function leerFiltros(sp: URLSearchParams): Filtros {
   return f;
 }
 
+/** El listado es la vista por defecto: /contratos abre la tabla. */
 export function leerVista(sp: URLSearchParams): Vista {
   const v = sp.get("v") as Vista | null;
-  if (v && VISTAS.includes(v)) return v;
-  // un enlace a un contrato sin vista explícita abre el listado, no el mapa
-  return sp.get("c") ? "contratos" : "mapa";
+  return v && VISTAS.includes(v) ? v : "contratos";
 }
 
 export const leerContrato = (sp: URLSearchParams) => sp.get("c") ?? null;
@@ -63,7 +62,7 @@ export function escribirUrl(
   vista: Vista, filtros: Filtros, contrato: string | null,
 ): string {
   const sp = new URLSearchParams();
-  if (vista !== "mapa") sp.set("v", vista);
+  if (vista !== "contratos") sp.set("v", vista);
   for (const [campo, clave] of Object.entries(CLAVES) as [keyof Filtros, string][]) {
     const v = filtros[campo];
     if (v && v !== FILTROS_VACIOS[campo]) sp.set(clave, v);

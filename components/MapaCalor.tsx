@@ -41,18 +41,61 @@ export default function MapaCalor({
 
   const porBarrio = useMemo(() => {
     const m = new Map<string, Contrato[]>();
-    for (const c of contratos) if (c.barrio) (m.get(c.barrio) ?? m.set(c.barrio, []).get(c.barrio)!).push(c);
+    for (const c of contratos) {
+      if (!c.barrio) continue;
+      const a = m.get(c.barrio);
+      if (a) a.push(c); else m.set(c.barrio, [c]);
+    }
     return m;
   }, [contratos]);
 
+  /** Coordenadas y metadatos por barrio, del archivo precalculado. */
+  const geoBarrios = useMemo(() => {
+    const m = new Map<string, { coords: [number, number]; src: string; isla: string }>();
+    for (const f of barrios.features) {
+      const p = f.properties as { barrio: string; src: string; isla: string };
+      if (f.geometry.type === "Point") {
+        m.set(p.barrio, {
+          coords: f.geometry.coordinates as [number, number],
+          src: p.src, isla: p.isla,
+        });
+      }
+    }
+    return m;
+  }, [barrios]);
+
+  /**
+   * El heatmap se arma con los contratos que pasan los filtros, no con el
+   * agregado del build: si el listado y el mapa mostraran conjuntos distintos,
+   * el mapa mentiría.
+   */
+  const puntos = useMemo<FeatureCollection>(() => {
+    const feats = [];
+    for (const [barrio, cs] of porBarrio) {
+      const g = geoBarrios.get(barrio);
+      if (!g) continue;
+      feats.push({
+        type: "Feature" as const,
+        properties: {
+          barrio, n: cs.length, valor: cs.reduce((s, c) => s + c.valor, 0),
+          src: g.src, isla: g.isla,
+        },
+        geometry: { type: "Point" as const, coordinates: g.coords },
+      });
+    }
+    feats.sort((a, b) => b.properties.n - a.properties.n);
+    return { type: "FeatureCollection", features: feats };
+  }, [porBarrio, geoBarrios]);
+
   const maximos = useMemo(() => {
     let n = 0, valor = 0;
-    for (const f of barrios.features) {
-      n = Math.max(n, (f.properties as { n: number }).n);
-      valor = Math.max(valor, (f.properties as { valor: number }).valor);
+    for (const f of puntos.features) {
+      const p = f.properties as { n: number; valor: number };
+      n = Math.max(n, p.n);
+      valor = Math.max(valor, p.valor);
     }
-    return { n, valor };
-  }, [barrios]);
+    return { n: n || 1, valor: valor || 1 };
+  }, [puntos]);
 
   // --- crear el mapa una sola vez ---
   useEffect(() => {
@@ -106,7 +149,7 @@ export default function MapaCalor({
           .setLngLat(centro).addTo(map);
       }
 
-      map.addSource("barrios", { type: "geojson", data: barrios });
+      map.addSource("barrios", { type: "geojson", data: puntos });
       map.addLayer({
         id: "calor", type: "heatmap", source: "barrios",
         paint: {
@@ -147,26 +190,24 @@ export default function MapaCalor({
 
     mapRef.current = map;
     return () => { ro.disconnect(); map.remove(); mapRef.current = null; };
-  }, [islas, barrios, maximos.n]);
+  }, [islas]);
 
-  // --- cambiar el peso del heatmap ---
+  // --- refrescar puntos y peso cuando cambian los filtros o la métrica ---
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !listo) return;
+    (map.getSource("barrios") as maplibregl.GeoJSONSource | undefined)?.setData(puntos);
     const max = peso === "n" ? maximos.n : maximos.valor;
     map.setPaintProperty("calor", "heatmap-weight",
       ["interpolate", ["linear"], ["get", peso], 0, 0, max, 1]);
-  }, [peso, listo, maximos]);
+  }, [peso, listo, maximos, puntos]);
 
   // --- etiquetas como marcadores HTML (evita depender de un servidor de glyphs) ---
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !listo) return;
 
-    const feats = [...barrios.features].sort(
-      (a, b) => (b.properties as { n: number }).n - (a.properties as { n: number }).n);
-
-    const items = feats.map((f) => {
+    const items = puntos.features.map((f) => {
       const p = f.properties as { barrio: string; n: number; src: string };
       // El elemento raíz del marcador queda para MapLibre (posiciona con transform y
       // administra su propia opacidad). La etiqueta va dentro, y es la que ocultamos.
@@ -232,16 +273,21 @@ export default function MapaCalor({
       items.forEach((i) => i.marker.remove());
       markers.current = [];
     };
-  }, [barrios, listo, sel]);
+  }, [puntos, listo, sel]);
+
+  /** Cuántos de los contratos filtrados llegaron al mapa y por qué el resto no. */
+  const cobertura = useMemo(() => {
+    let ubicados = 0, secop1 = 0;
+    for (const c of contratos) {
+      if (c.barrio) ubicados++;
+      else if (c.fuente === "SECOP I") secop1++;
+    }
+    return { ubicados, secop1, sinUbicar: contratos.length - ubicados };
+  }, [contratos]);
 
   const detalle = sel ? porBarrio.get(sel) ?? [] : [];
   const detalleValor = detalle.reduce((s, c) => s + c.valor, 0);
-  const srcSel = sel
-    ? (barrios.features.find((f) => (f.properties as { barrio: string }).barrio === sel)
-        ?.properties as { src: string } | undefined)?.src
-    : undefined;
-
-  const cobertura = meta.geo.cobertura;
+  const srcSel = sel ? geoBarrios.get(sel)?.src : undefined;
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1fr_340px]">
@@ -263,6 +309,23 @@ export default function MapaCalor({
               </button>
             ))}
         </div>
+
+        {contratos.length > 0 && puntos.features.length === 0 && (
+          <div className="absolute inset-x-6 top-1/2 z-10 -translate-y-1/2 rounded-xl border p-5 text-center backdrop-blur"
+               style={{ borderColor: "var(--coral)",
+                        background: "color-mix(in srgb, var(--surface) 94%, transparent)" }}>
+            <p className="text-sm font-semibold">Este filtro no deja nada que ubicar</p>
+            <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed"
+               style={{ color: "var(--ink-soft)" }}>
+              Ninguno de los {numero(contratos.length)} contratos seleccionados publica el
+              domicilio del contratista
+              {cobertura.secop1 === contratos.length
+                ? ", porque todos son de SECOP I y ese sistema no incluye el campo."
+                : "."}{" "}
+              Los filtros siguen aplicados: el listado sí los muestra.
+            </p>
+          </div>
+        )}
 
         {/* la distancia real entre islas es de ~90 km: se declara para no engañar */}
         <div className="pointer-events-none absolute bottom-3 right-3 max-w-[190px] rounded-lg border px-2.5 py-1.5 text-[10px] leading-snug backdrop-blur"
@@ -299,14 +362,20 @@ export default function MapaCalor({
               </p>
               <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
                 <div className="rounded-lg px-2.5 py-2" style={{ background: "var(--raised)" }}>
-                  <div className="num text-lg font-semibold">{numero(meta.geo.con_barrio)}</div>
-                  <div style={{ color: "var(--muted)" }}>ubicados</div>
+                  <div className="num text-lg font-semibold">{numero(cobertura.ubicados)}</div>
+                  <div style={{ color: "var(--muted)" }}>en el mapa</div>
                 </div>
                 <div className="rounded-lg px-2.5 py-2" style={{ background: "var(--raised)" }}>
-                  <div className="num text-lg font-semibold">{meta.geo.barrios_ubicados}</div>
+                  <div className="num text-lg font-semibold">{puntos.features.length}</div>
                   <div style={{ color: "var(--muted)" }}>barrios</div>
                 </div>
               </div>
+              {cobertura.sinUbicar > 0 && (
+                <p className="mt-2 text-[11px]" style={{ color: "var(--muted)" }}>
+                  Quedan fuera {numero(cobertura.sinUbicar)} de los{" "}
+                  {numero(contratos.length)} contratos filtrados, sin domicilio publicado.
+                </p>
+              )}
             </div>
             <Nota>
               <strong>Cómo leer este mapa.</strong> Los contratos del SECOP no traen
@@ -316,7 +385,7 @@ export default function MapaCalor({
               {numero(meta.contratos - meta.geo.mapeables)} contratos de SECOP I
               (2015-2022) no pueden ubicarse nunca. De los{" "}
               {numero(meta.geo.mapeables)} que sí traen el campo se ubicó el{" "}
-              <strong>{(cobertura * 100).toFixed(1)}%</strong>
+              <strong>{(meta.geo.cobertura * 100).toFixed(1)}%</strong>
               {" "}({numero(meta.geo.sin_dato)} sin domicilio y{" "}
               {numero(meta.geo.no_reconocido)} con texto no reconocido), o sea{" "}
               {(meta.geo.cobertura_total * 100).toFixed(1)}% del total.

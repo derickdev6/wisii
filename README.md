@@ -8,8 +8,19 @@ abiertos de `datos.gov.co`. Cubre **37.955 contratos entre marzo de 2015 y agost
 uniendo los dos sistemas de contratación pública del país.
 
 Dos rutas: una **portada** (`/`) que explica el proyecto, muestra lo firmado en el último
-mes y lleva al explorador; y el **explorador** (`/contratos`) con tres vistas: mapa de calor,
-listado con búsqueda integral, y un editor para corregir la ubicación de los barrios.
+mes y lleva al explorador; y el **explorador** (`/contratos`) con tres vistas: listado con
+búsqueda integral (la que abre por defecto), mapa de calor (`?v=mapa`) y un editor para
+corregir la ubicación de los barrios.
+
+La barra de filtros es la misma en el listado y en el mapa, y las dos vistas miran el mismo
+subconjunto: el mapa se agrega en el navegador a partir de los contratos filtrados, no del
+agregado del build. Solo el listado lleva buscador de texto — en el mapa una búsqueda
+escrita acotaría el resultado sin que se vea por qué.
+
+Cuidado con una consecuencia del dato: **cualquier período anterior a mediados de 2020
+deja el mapa vacío**, porque esos contratos son de SECOP I y ese sistema no publica el
+domicilio del contratista. El mapa lo dice explícitamente en vez de mostrarse en blanco, y
+el panel declara siempre cuántos de los contratos filtrados quedaron fuera.
 
 La portada se prerenderiza en el build leyendo `public/data/*.json` desde el sistema de
 archivos, así que sale con 623 B de JavaScript y no descarga los 10 MB de contratos: eso

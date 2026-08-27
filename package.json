@@ -9,7 +9,8 @@
     "lint": "next lint",
     "data:fetch": "python3 scripts/fetch_data.py && python3 scripts/fetch_secop1.py && python3 scripts/fetch_geo.py",
     "data:build": "python3 scripts/build_data.py",
-    "data:all": "npm run data:fetch && npm run data:build"
+    "data:all": "npm run data:fetch && npm run data:build",
+    "check": "NEXT_DIST_DIR=.next-check next build"
   },
   "dependencies": {
     "next": "^15.5.4",
