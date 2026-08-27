@@ -152,10 +152,11 @@ La codificación vive en [`lib/urlEstado.ts`](lib/urlEstado.ts).
 
 ## El listado
 
-Filas de alto fijo (84 px) dentro de una caja con scroll propio de 840 px, de modo que
-siempre se ven **10 contratos a la vez** sin depender del largo del objeto. La paginación
-va en pasos de 10, 20, 50 y 100, con 20 por defecto; al cambiar de página o de filtro el
-scroll interno vuelve al tope.
+Caja de alto fijo (800 px) con scroll propio; las filas conservan su alto natural
+(~113 px), que deja aire suficiente para leer el objeto del contrato en dos líneas junto
+a sus etiquetas. Entran unas 7 filas por pantalla de caja. La paginación va en pasos de
+10, 20, 50 y 100, con 20 por defecto; al cambiar de página o de filtro el scroll interno
+vuelve al tope.
 
 ## Filtros facetados
 

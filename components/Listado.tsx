@@ -17,33 +17,30 @@ const ORDENES: [Orden, string][] = [
 const TAMANOS = [10, 20, 50, 100];
 const POR_PAGINA_INICIAL = 20;
 
-/** Alto fijo de fila. Con él la caja puede dimensionarse para mostrar
- *  exactamente VISIBLES filas sin depender del largo del objeto. */
-const ALTO_FILA = 84;
-const VISIBLES = 10;
+/** Alto fijo de la caja de resultados; las filas conservan su alto natural. */
+const ALTO_CAJA = 800;
 
 function Fila({ c, onAbrir }: { c: Contrato; onAbrir: () => void }) {
   return (
     <button onClick={onAbrir}
-            className="flex w-full flex-col justify-center gap-0.5 overflow-hidden border-b px-4 text-left transition hover:bg-[var(--raised)]"
-            style={{ height: ALTO_FILA, borderColor: "var(--line-soft)" }}>
+            className="flex w-full flex-col gap-1.5 border-b px-4 py-3 text-left transition hover:bg-[var(--raised)]"
+            style={{ borderColor: "var(--line-soft)" }}>
       <div className="flex items-baseline justify-between gap-3">
-        <span className="truncate text-sm font-medium leading-5">{c.proveedor}</span>
-        <span className="num shrink-0 text-sm font-semibold leading-5" style={{ color: "var(--cta)" }}>
+        <span className="truncate text-sm font-medium">{c.proveedor}</span>
+        <span className="num shrink-0 text-sm font-semibold" style={{ color: "var(--cta)" }}>
           {cop(c.valor)}
         </span>
       </div>
-      <p className="line-clamp-2 text-[11px] leading-[15px]" style={{ color: "var(--ink-soft)" }}>
+      <p className="line-clamp-2 text-xs leading-snug" style={{ color: "var(--ink-soft)" }}>
         {c.objeto}
       </p>
-      <div className="flex flex-nowrap items-center gap-1.5 overflow-hidden">
+      <div className="flex flex-wrap items-center gap-1.5">
         <Chip tono={c.estado === "En ejecución" ? "ok" : "neutro"}>{c.estado}</Chip>
         {c.duracion && <Chip>{c.duracion}</Chip>}
+        <Chip>{c.destino}</Chip>
         {c.barrio && <Chip>{c.barrio}</Chip>}
         {c.fuente === "SECOP I" && <Chip tono="alerta">SECOP I</Chip>}
-        <span className="num shrink-0 text-[11px]" style={{ color: "var(--muted)" }}>
-          {fecha(c.firma)}
-        </span>
+        <span className="num text-[11px]" style={{ color: "var(--muted)" }}>{fecha(c.firma)}</span>
       </div>
     </button>
   );
@@ -101,9 +98,9 @@ export default function Listado({
         </div>
       </div>
 
-      {/* caja con scroll propio, dimensionada para ver 10 filas de una vez */}
+      {/* caja de alto fijo con scroll propio */}
       <div ref={caja} className="overflow-y-auto overscroll-contain rounded-xl border"
-           style={{ height: ALTO_FILA * VISIBLES, borderColor: "var(--line)",
+           style={{ height: ALTO_CAJA, borderColor: "var(--line)",
                     background: "var(--surface)" }}>
         {visibles.length === 0 ? (
           <div className="p-10 text-center text-sm" style={{ color: "var(--muted)" }}>
