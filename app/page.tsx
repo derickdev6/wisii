@@ -2,12 +2,12 @@ import Link from "next/link";
 import type { Meta, Recientes } from "@/lib/types";
 import { leerDatos } from "@/lib/estaticos";
 import { cop, copCorto, fecha, numero } from "@/lib/format";
-import { ANIO, CONTACTO, FUENTES, NORMAS, RESPONSABLE } from "@/lib/legal";
+import { ANIO, CONTACTO, FUENTES, MARCA, MARCA_SIGNIFICADO, NORMAS, RESPONSABLE } from "@/lib/legal";
 import TemaToggle from "@/components/TemaToggle";
 import { secopUrl } from "@/lib/format";
 
 export const metadata = {
-  title: "Observatorio de contratación · Archipiélago de San Andrés",
+  title: "WiSii · Contratación pública del Archipiélago",
 };
 
 function Dato({ valor, etiqueta, nota }: { valor: string; etiqueta: string; nota?: string }) {
@@ -38,7 +38,7 @@ export default async function Portada() {
           <span className="flex items-center gap-2 text-sm font-semibold tracking-tight">
             <span aria-hidden className="inline-block h-2.5 w-2.5 rounded-full"
                   style={{ background: "var(--cta)" }} />
-            Observatorio del Archipiélago
+            {MARCA}
           </span>
           <div className="flex items-center gap-2">
             <TemaToggle />
@@ -57,10 +57,16 @@ export default async function Portada() {
            style={{ color: "var(--cta)" }}>
           Veeduría de contratación pública
         </p>
-        <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-[1.08] tracking-tight sm:text-6xl">
-          Cada peso que contrata el Archipiélago,{" "}
-          <span style={{ color: "var(--accent)" }}>a la vista de todos</span>.
+        <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
+          <span className="block text-5xl sm:text-7xl">{MARCA}</span>
+          <span className="mt-3 block">
+            Cada peso que contrata el Archipiélago,{" "}
+            <span style={{ color: "var(--accent)" }}>a la vista de todos</span>.
+          </span>
         </h1>
+        <p className="mt-4 text-sm italic" style={{ color: "var(--muted)" }}>
+          {MARCA_SIGNIFICADO}
+        </p>
         <p className="mt-6 max-w-2xl text-base leading-relaxed sm:text-lg"
            style={{ color: "var(--ink-soft)" }}>
           La contratación de las regiones se publica, pero queda enterrada en portales
@@ -135,7 +141,10 @@ export default async function Portada() {
                     </span>
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-                        <span className="text-sm font-medium">{c.proveedor}</span>
+                        <Link href={`/contratos?c=${encodeURIComponent(c.id)}`}
+                              className="text-sm font-medium underline-offset-2 hover:underline">
+                          {c.proveedor}
+                        </Link>
                         <span className="num text-sm font-semibold" style={{ color: "var(--cta)" }}>
                           {cop(c.valor)}
                         </span>
@@ -150,11 +159,14 @@ export default async function Portada() {
                         <span>·</span>
                         <span>{c.estado}</span>
                         {c.barrio && (<><span>·</span><span>{c.barrio}</span></>)}
+                        <span>·</span>
+                        <Link href={`/contratos?c=${encodeURIComponent(c.id)}`}
+                              className="underline underline-offset-2">ver el detalle</Link>
                         {url && (
                           <>
                             <span>·</span>
                             <a href={url} target="_blank" rel="noopener noreferrer"
-                               className="underline underline-offset-2">ver en el SECOP ↗</a>
+                               className="underline underline-offset-2">SECOP ↗</a>
                           </>
                         )}
                       </div>

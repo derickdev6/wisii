@@ -1,6 +1,8 @@
-# Contratación de la Gobernación de San Andrés
+# WiSii
 
-Visualización de la contratación de la **Gobernación del Departamento Archipiélago
+> *WiSii* — «we see» en creole isleño: **nosotros vemos**.
+
+Veeduría ciudadana de la contratación de la **Gobernación del Departamento Archipiélago
 de San Andrés, Providencia y Santa Catalina** (NIT 892400038), a partir de los datos
 abiertos de `datos.gov.co`. Cubre **37.955 contratos entre marzo de 2015 y agosto de 2026**,
 uniendo los dos sistemas de contratación pública del país.
@@ -109,6 +111,30 @@ quedaban sin ubicar, y se corrigieron tres asignaciones equivocadas: **La Monta�
 localidades de Providencia, no de San Andrés — yo las había colocado a mano en San Andrés
 con coordenadas inventadas. OpenStreetMap las ubica en Providencia, así que ahora usan sus
 coordenadas verificables. Si el conocimiento local dice otra cosa, se corrigen en el editor.
+
+## Enlaces compartibles
+
+Todo el estado del explorador vive en la URL, así que una búsqueda se comparte tal cual:
+quien abre el enlace recibe los mismos filtros, el mismo orden y la misma vista.
+
+```
+/contratos?v=contratos&q=turismo&gob=2020-2023&estado=Cerrado&orden=valor-desc
+/contratos?c=CO1.PCCNTR.1637513
+```
+
+- **Compartir búsqueda** (barra de resultados) copia el enlace con todos los filtros
+  activos. Los valores por defecto no se escriben, así una búsqueda sin filtros deja la
+  URL limpia.
+- **Compartir** (ficha de un contrato) copia un enlace que reabre ese contrato. Un enlace
+  con `c=` y sin `v=` abre directamente el listado, no el mapa.
+- Si el `c=` no existe en los datos publicados —por ejemplo si el SECOP retiró el
+  registro— la página lo dice en vez de quedarse en blanco.
+- La URL se actualiza con `replace()`, no con `push()`, para que escribir en el buscador
+  no llene el historial del navegador.
+- Si el navegador bloquea el portapapeles, el botón muestra el enlace en un campo
+  seleccionado para copiarlo a mano.
+
+La codificación vive en [`lib/urlEstado.ts`](lib/urlEstado.ts).
 
 ## Filtros facetados
 
@@ -236,5 +262,5 @@ de 2015 del MinTIC.
 Este es un sitio **independiente**, sin vínculo ni respaldo de la Gobernación del
 Archipiélago, de Colombia Compra Eficiente ni de ninguna entidad pública. Presenta los datos
 tal como los publica el Estado; para efectos oficiales hay que consultar el SECOP.
-El nombre del responsable que aparece en el aviso de derechos se configura en
+La identidad del proyecto (marca, responsable, contacto) se configura en
 [`lib/legal.ts`](lib/legal.ts).

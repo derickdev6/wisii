@@ -1,9 +1,15 @@
 /**
- * Datos del responsable del sitio y textos legales.
- * Cambiá RESPONSABLE por el nombre real de la persona u organización que
- * publica el observatorio: aparece en el aviso de derechos del pie de página.
+ * Identidad y textos legales del sitio.
+ *
+ * WiSii viene del creole isleño: "we see", nosotros vemos. Es el nombre legal
+ * del proyecto y el que aparece en el aviso de derechos.
  */
-export const RESPONSABLE = "Observatorio de Contratación del Archipiélago";
+export const MARCA = "WiSii";
+export const MARCA_SIGNIFICADO = "«we see» en creole isleño: nosotros vemos";
+export const RESPONSABLE = "WiSii";
+export const DESCRIPCION_CORTA =
+  "Veeduría ciudadana de la contratación pública del Archipiélago de San Andrés, " +
+  "Providencia y Santa Catalina.";
 export const ANIO = new Date().getFullYear();
 export const CONTACTO = ""; // opcional: correo de contacto para correcciones
 

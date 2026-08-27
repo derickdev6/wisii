@@ -1,7 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import type { FeatureCollection } from "geojson";
 import type { Contrato, Meta } from "@/lib/types";
 import { cargarTodo } from "@/lib/data";
@@ -9,6 +10,10 @@ import { copCorto, fecha, numero } from "@/lib/format";
 import Link from "next/link";
 import { Cargando, Tarjeta } from "@/components/ui";
 import TemaToggle from "@/components/TemaToggle";
+import {
+  escribirUrl, FILTROS_VACIOS, leerContrato, leerFiltros, leerVista,
+  type Filtros, type Vista,
+} from "@/lib/urlEstado";
 import Listado from "@/components/Listado";
 import DetalleContrato from "@/components/DetalleContrato";
 
@@ -19,8 +24,6 @@ const MapaCalor = dynamic(() => import("@/components/MapaCalor"), {
 const EditorBarrios = dynamic(() => import("@/components/EditorBarrios"), {
   ssr: false, loading: () => <Cargando texto="Abriendo el editor…" />,
 });
-
-type Vista = "mapa" | "contratos" | "editor";
 
 const VISTAS: [Vista, string][] = [
   ["mapa", "Mapa de calor"],
@@ -34,12 +37,39 @@ interface Datos {
 }
 
 export default function Page() {
+  // useSearchParams necesita un límite de Suspense en una página prerenderizada
+  return (
+    <Suspense fallback={<Cargando texto="Cargando contratos…" />}>
+      <Explorador />
+    </Suspense>
+  );
+}
+
+function Explorador() {
+  const router = useRouter();
+  const sp = useSearchParams();
+
   const [d, setD] = useState<Datos | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [vista, setVista] = useState<Vista>("mapa");
-  const [abierto, setAbierto] = useState<Contrato | null>(null);
+
+  // El estado arranca desde la URL, así un enlace compartido abre exactamente
+  // la misma búsqueda. Después vive en React y se refleja de vuelta con
+  // replace(), para no llenar el historial con cada tecla del buscador.
+  const [vista, setVista] = useState<Vista>(() => leerVista(new URLSearchParams(sp.toString())));
+  const [filtros, setFiltros] = useState<Filtros>(() => leerFiltros(new URLSearchParams(sp.toString())));
+  const [abiertoId, setAbiertoId] = useState<string | null>(
+    () => leerContrato(new URLSearchParams(sp.toString())));
 
   useEffect(() => { cargarTodo().then(setD).catch((e) => setError(String(e.message ?? e))); }, []);
+
+  const url = escribirUrl(vista, filtros, abiertoId);
+  useEffect(() => { router.replace(`/contratos${url}`, { scroll: false }); }, [url, router]);
+
+  const abierto = useMemo(
+    () => (d && abiertoId ? d.contratos.find((c) => c.id === abiertoId) ?? null : null),
+    [d, abiertoId]);
+  /** el enlace traía un id que no existe en los datos publicados */
+  const noEncontrado = Boolean(d && abiertoId && !abierto);
 
   if (error) {
     return (
@@ -62,7 +92,7 @@ export default function Page() {
         <div className="mb-3 flex items-center justify-between gap-3">
           <Link href="/" className="text-xs font-medium transition hover:opacity-70"
                 style={{ color: "var(--muted)" }}>
-            ← Observatorio del Archipiélago
+            ← WiSii
           </Link>
           <TemaToggle />
         </div>
@@ -111,10 +141,12 @@ export default function Page() {
       <section className="mt-4">
         {vista === "mapa" && (
           <MapaCalor contratos={contratos} islas={islas} barrios={barrios} meta={meta}
-                     onAbrirContrato={setAbierto} />
+                     onAbrirContrato={(c) => setAbiertoId(c.id)} />
         )}
         {vista === "contratos" && (
-          <Listado contratos={contratos} onAbrirContrato={setAbierto} />
+          <Listado contratos={contratos} filtros={filtros} setFiltros={setFiltros}
+                   urlCompartir={`/contratos${escribirUrl("contratos", filtros, null)}`}
+                   onAbrirContrato={(c) => setAbiertoId(c.id)} />
         )}
         {vista === "editor" && <EditorBarrios meta={meta} />}
       </section>
@@ -138,7 +170,23 @@ export default function Page() {
         sugeriría una ejecución cercana a cero que el dato no respalda.
       </footer>
 
-      {abierto && <DetalleContrato c={abierto} onCerrar={() => setAbierto(null)} />}
+      {noEncontrado && (
+        <div role="status"
+             className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 rounded-xl border px-4 py-2.5 text-xs shadow-lg"
+             style={{ borderColor: "var(--coral)", background: "var(--surface)", color: "var(--ink)" }}>
+          El contrato <code>{abiertoId}</code> no está en los datos publicados.
+          <button onClick={() => setAbiertoId(null)} className="ml-3 underline"
+                  style={{ color: "var(--muted)" }}>cerrar</button>
+        </div>
+      )}
+
+      {abierto && (
+        <DetalleContrato
+          c={abierto}
+          url={`/contratos${escribirUrl(vista, filtros, abierto.id)}`}
+          onCerrar={() => setAbiertoId(null)}
+        />
+      )}
     </main>
   );
 }

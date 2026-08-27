@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import type { Contrato } from "@/lib/types";
 import { cop, fecha, secopUrl } from "@/lib/format";
 import { Chip } from "./ui";
+import Compartir from "./Compartir";
 
 function Campo({ k, v, mono }: { k: string; v: React.ReactNode; mono?: boolean }) {
   return (
@@ -14,7 +15,12 @@ function Campo({ k, v, mono }: { k: string; v: React.ReactNode; mono?: boolean }
   );
 }
 
-export default function DetalleContrato({ c, onCerrar }: { c: Contrato; onCerrar: () => void }) {
+export default function DetalleContrato({ c, url: urlCompartir, onCerrar }: {
+  c: Contrato;
+  /** enlace que reabre este contrato tal cual */
+  url: string;
+  onCerrar: () => void;
+}) {
   useEffect(() => {
     const esc = (e: KeyboardEvent) => e.key === "Escape" && onCerrar();
     window.addEventListener("keydown", esc);
@@ -45,9 +51,13 @@ export default function DetalleContrato({ c, onCerrar }: { c: Contrato; onCerrar
             </div>
             <h2 className="mt-2 text-lg font-semibold leading-tight">{c.proveedor}</h2>
           </div>
-          <button onClick={onCerrar} aria-label="Cerrar"
-                  className="shrink-0 rounded-lg border px-2.5 py-1 text-sm"
-                  style={{ borderColor: "var(--line)", color: "var(--muted)" }}>✕</button>
+          <div className="flex shrink-0 items-center gap-2">
+            <Compartir url={urlCompartir} etiqueta="Compartir"
+                       titulo="Copia un enlace que abre este contrato" />
+            <button onClick={onCerrar} aria-label="Cerrar"
+                    className="rounded-lg border px-2.5 py-1 text-sm"
+                    style={{ borderColor: "var(--line)", color: "var(--muted)" }}>✕</button>
+          </div>
         </div>
 
         <div className="p-5">

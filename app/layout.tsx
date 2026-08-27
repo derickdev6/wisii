@@ -2,16 +2,17 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "maplibre-gl/dist/maplibre-gl.css";
 
-const TITULO = "Observatorio de contratación · Archipiélago de San Andrés";
+const TITULO = "WiSii · Contratación pública del Archipiélago";
 const DESCRIPCION =
-  "Observatorio ciudadano de la contratación pública de la Gobernación del " +
+  "WiSii (\"we see\" en creole isleño) es la veeduría ciudadana de la contratación " +
+  "pública de la Gobernación del " +
   "Departamento Archipiélago de San Andrés, Providencia y Santa Catalina, " +
   "construido sobre los datos abiertos del SECOP publicados en datos.gov.co.";
 
 export const metadata: Metadata = {
-  title: { default: TITULO, template: "%s · Observatorio del Archipiélago" },
+  title: { default: TITULO, template: "%s · WiSii" },
   description: DESCRIPCION,
-  applicationName: "Observatorio de contratación del Archipiélago",
+  applicationName: "WiSii",
   openGraph: { title: TITULO, description: DESCRIPCION, locale: "es_CO", type: "website" },
   robots: { index: true, follow: true },
 };

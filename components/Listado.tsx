@@ -6,11 +6,11 @@ import { normalizar } from "@/lib/data";
 import { cop, copCorto, fecha, numero } from "@/lib/format";
 import { Chip } from "./ui";
 import { etiquetaPeriodo, periodoPorId, periodosConDatos, titular } from "@/lib/gobiernos";
+import { FILTROS_VACIOS, type Filtros, type Orden } from "@/lib/urlEstado";
+import Compartir from "./Compartir";
 
 const ALTO = 104;      // alto fijo por fila: habilita virtualización simple
 const COLCHON = 6;     // filas extra arriba y abajo
-
-type Orden = "firma-desc" | "firma-asc" | "valor-desc" | "valor-asc";
 
 const ORDENES: [Orden, string][] = [
   ["firma-desc", "Más recientes"],
@@ -66,22 +66,30 @@ function Selector({ etiqueta, valor, onChange, opciones }: {
   );
 }
 
-export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
+export default function Listado({
+  contratos, filtros, setFiltros, urlCompartir, onAbrirContrato,
+}: {
   contratos: Contrato[];
+  /** el estado vive en la página, que lo sincroniza con la URL */
+  filtros: Filtros;
+  setFiltros: (f: Filtros) => void;
+  urlCompartir: string;
   onAbrirContrato: (c: Contrato) => void;
-  barrioInicial?: string | null;
 }) {
-  const [gobierno, setGobierno] = useState("");
-  const [q, setQ] = useState("");
-  const [fuente, setFuente] = useState("");
-  const [estado, setEstado] = useState("");
-  const [tipo, setTipo] = useState("");
-  const [modalidad, setModalidad] = useState("");
-  const [barrio, setBarrio] = useState(barrioInicial ?? "");
-  const [desde, setDesde] = useState("");
-  const [hasta, setHasta] = useState("");
-  const [minValor, setMinValor] = useState("");
-  const [orden, setOrden] = useState<Orden>("firma-desc");
+  const { q, gobierno, fuente, estado, tipo, modalidad,
+          barrio, desde, hasta, minValor, orden } = filtros;
+
+  const set = <K extends keyof Filtros>(k: K, v: Filtros[K]) =>
+    setFiltros({ ...filtros, [k]: v });
+
+  const setQ = (v: string) => set("q", v);
+  const setFuente = (v: string) => set("fuente", v);
+  const setEstado = (v: string) => set("estado", v);
+  const setTipo = (v: string) => set("tipo", v);
+  const setModalidad = (v: string) => set("modalidad", v);
+  const setBarrio = (v: string) => set("barrio", v);
+  const setMinValor = (v: string) => set("minValor", v);
+  const setOrden = (v: Orden) => set("orden", v);
 
   const qd = useDeferredValue(q);
 
@@ -94,15 +102,13 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
 
   /** Elegir un gobierno fija las fechas a su período constitucional. */
   function elegirGobierno(id: string) {
-    setGobierno(id);
     const p = id ? periodoPorId(id) : null;
-    setDesde(p ? p.desde : "");
-    setHasta(p ? p.hasta : "");
+    setFiltros({ ...filtros, gobierno: id, desde: p ? p.desde : "", hasta: p ? p.hasta : "" });
   }
 
   /** Editar una fecha a mano deja de corresponder a un período: se desmarca. */
-  const setDesdeManual = (v: string) => { setGobierno(""); setDesde(v); };
-  const setHastaManual = (v: string) => { setGobierno(""); setHasta(v); };
+  const setDesdeManual = (v: string) => setFiltros({ ...filtros, gobierno: "", desde: v });
+  const setHastaManual = (v: string) => setFiltros({ ...filtros, gobierno: "", hasta: v });
 
   /** Un predicado por dimensión activa; las inactivas no entran. */
   const preds = useMemo(() => {
@@ -180,10 +186,7 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
   const ultima = Math.min(filtrados.length, Math.ceil((scrollTop + alto) / ALTO) + COLCHON);
   const visibles = filtrados.slice(primera, ultima);
 
-  const limpiar = () => {
-    setQ(""); setFuente(""); setEstado(""); setTipo(""); setModalidad(""); setBarrio("");
-    setGobierno(""); setDesde(""); setHasta(""); setMinValor("");
-  };
+  const limpiar = () => setFiltros({ ...FILTROS_VACIOS, orden });
   const hayFiltro = q || gobierno || fuente || estado || tipo || modalidad || barrio || desde || hasta || minValor;
 
   return (
@@ -294,11 +297,15 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
             </button>
           )}
         </div>
+        <div className="flex items-center gap-2">
+          <Compartir url={urlCompartir} etiqueta="Compartir búsqueda"
+                     titulo="Copia un enlace que abre esta misma búsqueda con sus filtros" />
         <select value={orden} onChange={(e) => setOrden(e.target.value as Orden)}
                 className="rounded-lg border px-2 py-1 text-xs"
                 style={{ borderColor: "var(--line)", background: "var(--surface)", color: "var(--ink)" }}>
           {ORDENES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
         </select>
+        </div>
       </div>
 
       {/* lista virtualizada */}
