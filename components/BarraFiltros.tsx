@@ -88,7 +88,8 @@ export default function BarraFiltros({
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-7">
+      {/* Una sola línea en pantallas anchas: 7 controles y el botón de limpiar. */}
+      <div className="grid grid-cols-2 items-end gap-2 md:grid-cols-4 lg:grid-cols-8">
         <label className="flex min-w-0 flex-col gap-1">
           <span className="text-[10px] uppercase tracking-wider" style={{ color: "var(--muted)" }}>
             Gobierno
@@ -112,28 +113,25 @@ export default function BarraFiltros({
                   opciones={opciones.tipo} resaltado />
         <Selector etiqueta="Modalidad" valor={filtros.modalidad} onChange={(v) => set("modalidad", v)}
                   opciones={opciones.modalidad} resaltado />
-        <Selector etiqueta="Barrio" valor={filtros.barrio} onChange={(v) => set("barrio", v)}
-                  opciones={opciones.barrio} resaltado />
         <Fecha etiqueta="Firmado desde" valor={filtros.desde} onChange={setDesde} />
         <Fecha etiqueta="Hasta" valor={filtros.hasta} onChange={setHasta} />
-      </div>
 
-      <div className="mt-2 flex flex-wrap items-end justify-between gap-2">
-        <label className="flex flex-col gap-1">
+        <label className="flex min-w-0 flex-col gap-1">
           <span className="text-[10px] uppercase tracking-wider" style={{ color: "var(--muted)" }}>
             Valor mínimo
           </span>
           <input type="number" inputMode="numeric" value={filtros.minValor} placeholder="0"
                  onChange={(e) => set("minValor", e.target.value)}
-                 className="num w-36 rounded-lg border px-2 py-1.5 text-xs"
-                 style={{ borderColor: "var(--line)", background: "var(--surface)", color: "var(--ink)" }} />
+                 className="num w-full rounded-lg border px-2 py-1.5 text-xs"
+                 style={{ borderColor: filtros.minValor ? "var(--cta)" : "var(--line)",
+                          background: "var(--surface)", color: "var(--ink)" }} />
         </label>
-        {activos && (
-          <button onClick={limpiar} className="rounded-md border px-2.5 py-1.5 text-xs"
-                  style={{ borderColor: "var(--line)", color: "var(--muted)" }}>
-            quitar filtros
-          </button>
-        )}
+
+        <button onClick={limpiar} disabled={!activos}
+                className="rounded-lg border px-2 py-1.5 text-xs transition disabled:opacity-35"
+                style={{ borderColor: "var(--line)", color: "var(--ink-soft)" }}>
+          Quitar filtros
+        </button>
       </div>
     </div>
   );

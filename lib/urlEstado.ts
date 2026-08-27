@@ -16,7 +16,6 @@ export interface Filtros {
   estado: string;
   tipo: string;
   modalidad: string;
-  barrio: string;
   desde: string;
   hasta: string;
   minValor: string;
@@ -25,13 +24,13 @@ export interface Filtros {
 
 export const FILTROS_VACIOS: Filtros = {
   q: "", gobierno: "", estado: "", tipo: "", modalidad: "",
-  barrio: "", desde: "", hasta: "", minValor: "", orden: "firma-desc",
+  desde: "", hasta: "", minValor: "", orden: "firma-desc",
 };
 
 /** nombre del campo -> parámetro en la URL */
 const CLAVES: Record<keyof Filtros, string> = {
   q: "q", gobierno: "gob", estado: "estado", tipo: "tipo",
-  modalidad: "modalidad", barrio: "barrio", desde: "desde", hasta: "hasta",
+  modalidad: "modalidad", desde: "desde", hasta: "hasta",
   minValor: "min", orden: "orden",
 };
 

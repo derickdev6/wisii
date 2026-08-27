@@ -42,7 +42,7 @@ const COMPARADORES: Record<Orden, (a: Contrato, b: Contrato) => number> = {
 export interface Filtrado {
   filtrados: Contrato[];
   total: number;
-  opciones: Record<"estado" | "tipo" | "modalidad" | "barrio", [string, number][]>;
+  opciones: Record<"estado" | "tipo" | "modalidad", [string, number][]>;
   periodos: Periodo[];
   conteoPeriodos: Map<string, number>;
 }
@@ -63,7 +63,6 @@ export function useFiltrado(
     if (f.estado) p.estado = (c) => c.estado === f.estado;
     if (f.tipo) p.tipo = (c) => c.tipo === f.tipo;
     if (f.modalidad) p.modalidad = (c) => c.modalidad === f.modalidad;
-    if (f.barrio) p.barrio = (c) => c.barrio === f.barrio;
     if (f.desde || f.hasta) {
       p.fechas = (c) => (!f.desde || c.firma >= f.desde) && (!f.hasta || c.firma <= f.hasta);
     }
@@ -75,7 +74,7 @@ export function useFiltrado(
       if (terminos.length) p.q = (c) => terminos.every((t) => c.busq.includes(t));
     }
     return p;
-  }, [f.q, f.estado, f.tipo, f.modalidad, f.barrio, f.desde, f.hasta,
+  }, [f.q, f.estado, f.tipo, f.modalidad, f.desde, f.hasta,
       f.minValor, omitirBusqueda]);
 
   const filtrados = useMemo(() => {
@@ -87,8 +86,7 @@ export function useFiltrado(
     estado: faceta(contratos, preds, "estado", (c) => c.estado, f.estado),
     tipo: faceta(contratos, preds, "tipo", (c) => c.tipo, f.tipo),
     modalidad: faceta(contratos, preds, "modalidad", (c) => c.modalidad, f.modalidad),
-    barrio: faceta(contratos, preds, "barrio", (c) => c.barrio, f.barrio),
-  }), [contratos, preds, f.estado, f.tipo, f.modalidad, f.barrio]);
+  }), [contratos, preds, f.estado, f.tipo, f.modalidad]);
 
   const periodos = useMemo(() => {
     const fs = contratos.map((c) => c.firma).filter(Boolean).sort();
