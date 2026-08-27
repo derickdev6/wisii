@@ -222,8 +222,13 @@ La pestaña **Editor de barrios** existe para eso:
 - La pestaña **Sin reconocer** lista los textos de domicilio que ningún alias captura, con
   su frecuencia. Asignalos a un barrio existente o creá uno nuevo ubicándolo en el mapa.
   Cada asignación sube la cobertura del mapa de calor.
-- **Guardar** escribe `data/gazetteer.json` directamente (solo en local: en Vercel el
-  filesystem es de solo lectura, ahí se usa **Descargar**).
+- **Guardar** escribe `data/gazetteer.json` directamente.
+
+**El editor solo existe corriendo en local.** En Vercel el filesystem es de solo lectura,
+así que la pestaña no se muestra: `next.config.ts` resuelve
+`NEXT_PUBLIC_EDITOR_BARRIOS` a partir de `process.env.VERCEL` en tiempo de build, el bundle
+del despliegue ni siquiera referencia el componente, y un enlace a `?v=editor` cae al
+listado. Ofrecer un editor que no puede guardar solo confunde a quien visita el sitio.
 
 Después de guardar, recalculá los datos:
 

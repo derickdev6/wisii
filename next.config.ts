@@ -6,6 +6,12 @@ const nextConfig: NextConfig = {
   // servidor de desarrollo corre lo deja sirviendo 500. Con esto, una
   // verificación puede escribir en otro directorio (ver `npm run check`).
   distDir: process.env.NEXT_DIST_DIR || ".next",
+  env: {
+    // El editor de barrios escribe data/gazetteer.json en disco, algo imposible
+    // en Vercel (filesystem de solo lectura). Se resuelve en tiempo de build:
+    // en un despliegue la pestaña no se muestra ni se descarga su código.
+    NEXT_PUBLIC_EDITOR_BARRIOS: process.env.VERCEL ? "0" : "1",
+  },
   headers: async () => [
     {
       // los JSON se regeneran en cada build; cachear fuerte y revalidar por deploy

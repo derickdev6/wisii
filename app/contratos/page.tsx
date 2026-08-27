@@ -28,10 +28,13 @@ const EditorBarrios = dynamic(() => import("@/components/EditorBarrios"), {
   ssr: false, loading: () => <Cargando texto="Abriendo el editor…" />,
 });
 
+/** El editor solo existe corriendo en local; en Vercel no se ofrece. */
+const EDITOR_DISPONIBLE = process.env.NEXT_PUBLIC_EDITOR_BARRIOS !== "0";
+
 const VISTAS: [Vista, string][] = [
   ["contratos", "Contratos"],
   ["mapa", "Mapa de calor"],
-  ["editor", "Editor de barrios"],
+  ...(EDITOR_DISPONIBLE ? ([["editor", "Editor de barrios"]] as [Vista, string][]) : []),
 ];
 
 interface Datos {
@@ -58,7 +61,11 @@ function Explorador() {
   // El estado arranca desde la URL, así un enlace compartido abre exactamente
   // la misma búsqueda. Después vive en React y se refleja de vuelta con
   // replace(), para no llenar el historial con cada tecla del buscador.
-  const [vista, setVista] = useState<Vista>(() => leerVista(new URLSearchParams(sp.toString())));
+  const [vista, setVista] = useState<Vista>(() => {
+    const v = leerVista(new URLSearchParams(sp.toString()));
+    // un enlace a ?v=editor en un despliegue cae al listado
+    return v === "editor" && !EDITOR_DISPONIBLE ? "contratos" : v;
+  });
   const [filtros, setFiltros] = useState<Filtros>(() => leerFiltros(new URLSearchParams(sp.toString())));
   const [abiertoId, setAbiertoId] = useState<string | null>(
     () => leerContrato(new URLSearchParams(sp.toString())));
@@ -157,7 +164,7 @@ function Explorador() {
           <MapaCalor contratos={filtrado.filtrados} islas={islas} barrios={barrios}
                      meta={meta} onAbrirContrato={(c) => setAbiertoId(c.id)} />
         )}
-        {vista === "editor" && <EditorBarrios meta={meta} />}
+        {vista === "editor" && EDITOR_DISPONIBLE && <EditorBarrios meta={meta} />}
       </section>
 
       {/* contexto de lectura, debajo de los resultados */}
