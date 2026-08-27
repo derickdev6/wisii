@@ -261,19 +261,31 @@ def main():
             agg[b]["n"] += 1
             agg[b]["valor"] += r["valor"]
 
-    feats = [{"type": "Feature",
-              "properties": {"barrio": b, "n": a["n"], "valor": a["valor"],
-                             "src": barrios_geo[b]["src"]},
-              "geometry": {"type": "Point",
-                           "coordinates": [barrios_geo[b]["lon"], barrios_geo[b]["lat"]]}}
-             for b, a in sorted(agg.items(), key=lambda kv: -kv[1]["n"])]
+    # Providencia se dibuja junto a San Andrés (ver scripts/fetch_geo.py): los
+    # barrios de esa isla se desplazan con el mismo vector para que caigan sobre
+    # su polígono. Las coordenadas reales siguen en data/gazetteer.json, que es
+    # lo que usa el editor sobre imagen satelital.
+    islas = json.load(open(os.path.join(DATA, "islas.geojson"), encoding="utf-8"))
+    dlon, dlat = islas["properties"]["offsetProvidencia"]
+
+    feats = []
+    for b, a in sorted(agg.items(), key=lambda kv: -kv[1]["n"]):
+        g = barrios_geo[b]
+        mover = g.get("isla") == "Providencia"
+        feats.append({
+            "type": "Feature",
+            "properties": {"barrio": b, "n": a["n"], "valor": a["valor"],
+                           "src": g["src"], "isla": g.get("isla", "San Andrés")},
+            "geometry": {"type": "Point",
+                         "coordinates": [round(g["lon"] + (dlon if mover else 0), 6),
+                                         round(g["lat"] + (dlat if mover else 0), 6)]},
+        })
     json.dump({"type": "FeatureCollection", "features": feats},
               open(os.path.join(OUTDIR, "barrios.json"), "w"),
               ensure_ascii=False, separators=(",", ":"))
 
-    with open(os.path.join(DATA, "isla.geojson"), encoding="utf-8") as f:
-        json.dump(json.load(f), open(os.path.join(OUTDIR, "isla.geojson"), "w"),
-                  ensure_ascii=False, separators=(",", ":"))
+    json.dump(islas, open(os.path.join(OUTDIR, "islas.geojson"), "w"),
+              ensure_ascii=False, separators=(",", ":"))
 
     # --- meta ---
     valores = sorted(r["valor"] for r in rows)
@@ -305,6 +317,13 @@ def main():
             "cobertura_total": round(con_barrio / len(rows), 4),
             "barrios_ubicados": len(agg),
             "barrios_aprox": aprox,
+            "por_isla": {
+                isla: {
+                    "barrios": sum(1 for b in agg if barrios_geo[b].get("isla") == isla),
+                    "contratos": sum(a["n"] for b, a in agg.items()
+                                     if barrios_geo[b].get("isla") == isla),
+                } for isla in ("San Andrés", "Providencia")
+            },
         },
         "pendientes": [
             {"texto": t, "n": n} for t, n in Counter(

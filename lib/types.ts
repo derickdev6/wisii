@@ -77,6 +77,6 @@ export interface BarrioFeature {
 
 export interface Gazetteer {
   _nota?: string;
-  barrios: Record<string, { lat: number; lon: number; src: string }>;
+  barrios: Record<string, { lat: number; lon: number; src: string; isla?: string }>;
   alias: Record<string, string>;
 }

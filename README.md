@@ -39,12 +39,12 @@ ubicarse nunca.
 | | |
 |---|---|
 | Contratos con el campo domicilio (SECOP II) | 31.975 |
-| De ellos, ubicados en un barrio | 14.731 (46.1%) |
+| De ellos, ubicados en un barrio | 15.617 (48.8%) |
 | Sin domicilio útil (`NO DEFINIDO`) | 10.760 |
-| Domicilio presente pero no reconocido | 6.484 |
-| Cobertura sobre el total de 37.955 | 38.8% |
-| Barrios con coordenada de OpenStreetMap | 23 de 49 |
-| Barrios con coordenada aproximada (±300 m) | 26 de 49 |
+| Domicilio presente pero no reconocido | 5.598 |
+| Cobertura sobre el total de 37.955 | 41.1% |
+| Barrios con coordenada de OpenStreetMap | 41 de 65 |
+| Barrios con coordenada aproximada (±300 m) | 24 de 65 |
 
 Sirve para leer **concentración relativa** entre zonas. No sirve para medir montos por zona
 ni para localizar direcciones.
@@ -57,6 +57,51 @@ Dos campos más que conviene no malinterpretar:
   estados previos a la firma (Borrador, Cancelado, enviado Proveedor, En aprobación), con
   valores corruptos: hay borradores por encima de $1.000 billones COP, mil veces el PIB del
   país. Exigir fecha de firma elimina los dos problemas a la vez.
+
+## Filtro por período de gobierno
+
+El selector **Gobierno** fija las fechas al período constitucional de cada gobernación.
+En Colombia los gobernadores se eligen por cuatro años (Constitución, art. 303, modificado
+por el Acto Legislativo 2 de 2002), se posesionan el 1 de enero del año siguiente a la
+elección y terminan el 31 de diciembre del cuarto año; para 2024-2027 lo confirma la
+Ley 2200 de 2022. Las elecciones regionales son el último domingo de octubre.
+
+| Período | Elección | Titular electo | |
+|---|---|---|---|
+| 2012 – 2015 | 30 oct 2011 | Aury Socorro Guerrero Bowie | primera gobernadora por voto popular |
+| 2016 – 2019 | 25 oct 2015 | Ronald Housni Jaller | suspendido el 23 abr 2018; encargada Sandra Victoria Howard Taylor |
+| 2020 – 2023 | 27 oct 2019 | Everth Julio Hawkins Sjogreen | suspendido sep 2020, libre el 22 abr 2021; encargado Alen Jay Stephens |
+| 2024 – 2027 | 29 oct 2023 | Nicolás Iván Gallardo Vásquez | elección anulada por doble militancia; encargada Vilma Jay López; Girley Natacha Ordóñez Bowie elegida en la atípica del 5 jul 2026 |
+
+**El filtro usa las fechas legales del período, no la permanencia real de cada persona.**
+En este departamento casi ningún gobernador completó su mandato, así que los contratos de
+un período no corresponden todos al mismo gobernante. La interfaz lista los titulares con
+su rol (elegido o encargado) y lo advierte al seleccionar un período interrumpido. Editar
+una fecha a mano desmarca el gobierno, porque el rango deja de corresponder a un período.
+
+Los períodos viven en [`lib/gobiernos.ts`](lib/gobiernos.ts).
+
+## Las tres islas en el mapa
+
+El departamento incluye Providencia y Santa Catalina, a unos 90 km al nor-noreste de San
+Andrés. A escala real, mostrarlas juntas dejaría a San Andrés diminuta, así que el mapa de
+calor **conserva la forma y el tamaño verdaderos de cada isla pero dibuja el grupo de
+Providencia al lado de San Andrés**: lo único falseado es la distancia, y el mapa lo
+declara. El desplazamiento se calcula en `scripts/fetch_geo.py`, se guarda en
+`data/islas.geojson` y `build_data.py` lo aplica a los barrios de esa isla, de modo que
+caen sobre su polígono.
+
+El editor de barrios trabaja siempre con **coordenadas reales** sobre imagen satelital, y
+tiene un conmutador San Andrés / Providencia que vuela a la isla correspondiente y filtra
+la lista. `data/gazetteer.json` guarda las coordenadas reales; el desplazamiento existe
+solo en el mapa de calor.
+
+Al incorporar Providencia aparecieron 1.393 contratos en 10 barrios que antes
+quedaban sin ubicar, y se corrigieron tres asignaciones equivocadas: **La Montaña**
+(The Mountain), **San Felipe** (San Felipe Lazy Hill) y **Pueblo Viejo** (Old Town) son
+localidades de Providencia, no de San Andrés — yo las había colocado a mano en San Andrés
+con coordenadas inventadas. OpenStreetMap las ubica en Providencia, así que ahora usan sus
+coordenadas verificables. Si el conocimiento local dice otra cosa, se corrigen en el editor.
 
 ## Cómo correrlo
 
@@ -80,14 +125,17 @@ cp .env.example .env.local
 ## El editor de barrios
 
 OpenStreetMap tiene cobertura pobre de los barrios de San Andrés: de 19 nombres frecuentes
-en los datos, solo 2 aparecían indexados. Por eso 26 de las 49 ubicaciones son aproximadas
-y necesitan conocimiento local.
+en los datos, solo 2 aparecían indexados. (Providencia, en cambio, está bien mapeada: sus
+18 localidades salieron de OSM con coordenada verificable.) Por eso 24 de las 65 ubicaciones
+son aproximadas y necesitan conocimiento local.
 
 La pestaña **Editor de barrios** existe para eso:
 
 - Mapa satelital (Esri) o callejero (OSM) para reconocer el terreno.
 - La lista está ordenada por número de contratos, así se arregla primero lo que más pesa.
   Los chips marcan el origen: `OSM`, `aprox` o `editado`.
+- El conmutador **San Andrés / Providencia** cambia de isla; la lista y los marcadores
+  siguen a la isla activa, y los barrios nuevos se crean en ella.
 - Seleccioná un barrio y hacé clic en el mapa (o arrastrá el punto) para reubicarlo.
 - La pestaña **Sin reconocer** lista los textos de domicilio que ningún alias captura, con
   su frecuencia. Asignalos a un barrio existente o creá uno nuevo ubicándolo en el mapa.
@@ -102,7 +150,7 @@ npm run data:build
 ```
 
 `data/gazetteer.json` también se edita a mano sin problema: es un JSON plano con `barrios`
-(nombre → lat/lon/origen) y `alias` (texto normalizado → barrio).
+(nombre → lat/lon/origen/isla) y `alias` (texto normalizado → barrio).
 
 ## Desplegar en Vercel
 
@@ -119,10 +167,11 @@ redespliegue. Requiere un secret `SODA_APP_TOKEN` en el repo
 ```
 scripts/fetch_data.py      descarga SECOP II (paginado, deduplicado)
 scripts/fetch_secop1.py    descarga SECOP I (una sola consulta, lenta)
-scripts/fetch_geo.py       contorno de la isla desde Overpass, cosido y simplificado
+scripts/fetch_geo.py       contornos de las 3 islas desde Overpass, cosidos y simplificados
 scripts/geocode_barrios.py geocodificación inicial contra OSM/Nominatim
 scripts/build_data.py      une ambas fuentes + gazetteer -> public/data/*.json
-data/gazetteer.json        barrios y alias — editable a mano o desde el editor
+data/gazetteer.json        barrios (con isla) y alias — editable a mano o desde el editor
+lib/gobiernos.ts           períodos constitucionales de la Gobernación
 app/, components/, lib/    la aplicación Next.js
 ```
 

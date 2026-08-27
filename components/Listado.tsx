@@ -5,6 +5,7 @@ import type { Contrato } from "@/lib/types";
 import { normalizar } from "@/lib/data";
 import { cop, copCorto, fecha, numero } from "@/lib/format";
 import { Chip } from "./ui";
+import { etiquetaPeriodo, periodoPorId, periodosConDatos, titular } from "@/lib/gobiernos";
 
 const ALTO = 104;      // alto fijo por fila: habilita virtualización simple
 const COLCHON = 6;     // filas extra arriba y abajo
@@ -53,6 +54,7 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
   onAbrirContrato: (c: Contrato) => void;
   barrioInicial?: string | null;
 }) {
+  const [gobierno, setGobierno] = useState("");
   const [q, setQ] = useState("");
   const [fuente, setFuente] = useState("");
   const [estado, setEstado] = useState("");
@@ -65,6 +67,25 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
   const [orden, setOrden] = useState<Orden>("firma-desc");
 
   const qd = useDeferredValue(q);
+
+  const rango = useMemo(() => {
+    const fs = contratos.map((c) => c.firma).filter(Boolean).sort();
+    return { min: fs[0] ?? "", max: fs[fs.length - 1] ?? "" };
+  }, [contratos]);
+  const periodos = useMemo(() => periodosConDatos(rango.min, rango.max), [rango]);
+  const periodoSel = gobierno ? periodoPorId(gobierno) : null;
+
+  /** Elegir un gobierno fija las fechas a su período constitucional. */
+  function elegirGobierno(id: string) {
+    setGobierno(id);
+    const p = id ? periodoPorId(id) : null;
+    setDesde(p ? p.desde : "");
+    setHasta(p ? p.hasta : "");
+  }
+
+  /** Editar una fecha a mano deja de corresponder a un período: se desmarca. */
+  const setDesdeManual = (v: string) => { setGobierno(""); setDesde(v); };
+  const setHastaManual = (v: string) => { setGobierno(""); setHasta(v); };
 
   const opciones = useMemo(() => ({
     fuente: unicos(contratos, (c) => c.fuente),
@@ -126,12 +147,12 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
 
   const limpiar = () => {
     setQ(""); setFuente(""); setEstado(""); setTipo(""); setModalidad(""); setBarrio("");
-    setDesde(""); setHasta(""); setMinValor("");
+    setGobierno(""); setDesde(""); setHasta(""); setMinValor("");
   };
-  const hayFiltro = q || fuente || estado || tipo || modalidad || barrio || desde || hasta || minValor;
+  const hayFiltro = q || gobierno || fuente || estado || tipo || modalidad || barrio || desde || hasta || minValor;
 
   return (
-    <div className="flex h-[74vh] min-h-[520px] flex-col gap-3">
+    <div className="flex h-[82vh] min-h-[560px] flex-col gap-3">
       {/* buscador */}
       <div className="rounded-xl border p-3"
            style={{ borderColor: "var(--line)", background: "var(--surface)" }}>
@@ -149,21 +170,33 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
           )}
         </div>
 
-        <div className="mt-3 grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-8">
+        <div className="mt-3 grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-9">
           <Selector etiqueta="Fuente" valor={fuente} onChange={setFuente} opciones={opciones.fuente} />
           <Selector etiqueta="Estado" valor={estado} onChange={setEstado} opciones={opciones.estado} />
           <Selector etiqueta="Tipo" valor={tipo} onChange={setTipo} opciones={opciones.tipo} />
           <Selector etiqueta="Modalidad" valor={modalidad} onChange={setModalidad} opciones={opciones.modalidad} />
           <Selector etiqueta="Barrio" valor={barrio} onChange={setBarrio} opciones={opciones.barrio} />
+          <label className="flex min-w-0 flex-col gap-1">
+            <span className="text-[10px] uppercase tracking-wider" style={{ color: "var(--muted)" }}>Gobierno</span>
+            <select value={gobierno} onChange={(e) => elegirGobierno(e.target.value)}
+                    className="w-full truncate rounded-lg border px-2 py-1.5 text-xs"
+                    style={{ borderColor: gobierno ? "var(--accent)" : "var(--line)",
+                             background: "var(--surface)", color: "var(--ink)" }}>
+              <option value="">Todos los períodos</option>
+              {periodos.map((p) => (
+                <option key={p.id} value={p.id}>{etiquetaPeriodo(p)} · {titular(p)}</option>
+              ))}
+            </select>
+          </label>
           <label className="flex flex-col gap-1">
             <span className="text-[10px] uppercase tracking-wider" style={{ color: "var(--muted)" }}>Firmado desde</span>
-            <input type="date" value={desde} onChange={(e) => setDesde(e.target.value)}
+            <input type="date" value={desde} onChange={(e) => setDesdeManual(e.target.value)}
                    className="rounded-lg border px-2 py-1.5 text-xs"
                    style={{ borderColor: "var(--line)", background: "var(--surface)", color: "var(--ink)" }} />
           </label>
           <label className="flex flex-col gap-1">
             <span className="text-[10px] uppercase tracking-wider" style={{ color: "var(--muted)" }}>Hasta</span>
-            <input type="date" value={hasta} onChange={(e) => setHasta(e.target.value)}
+            <input type="date" value={hasta} onChange={(e) => setHastaManual(e.target.value)}
                    className="rounded-lg border px-2 py-1.5 text-xs"
                    style={{ borderColor: "var(--line)", background: "var(--surface)", color: "var(--ink)" }} />
           </label>
@@ -176,6 +209,39 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
           </label>
         </div>
       </div>
+
+      {periodoSel && (
+        <div className="rounded-xl border px-3.5 py-3"
+             style={{ borderColor: "var(--accent)", background: "var(--surface)" }}>
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 className="text-sm font-semibold">
+              Período constitucional {etiquetaPeriodo(periodoSel)}
+            </h3>
+            <span className="num text-[11px]" style={{ color: "var(--muted)" }}>
+              {fecha(periodoSel.desde)} — {fecha(periodoSel.hasta)} · elección del{" "}
+              {fecha(periodoSel.eleccion)}
+            </span>
+          </div>
+          <ul className="mt-2 space-y-1.5">
+            {periodoSel.gobernantes.map((g) => (
+              <li key={g.nombre} className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-xs">
+                <Chip tono={g.rol === "elegido" ? "ok" : "neutro"}>{g.rol}</Chip>
+                <span className="font-medium">{g.nombre}</span>
+                {g.nota && (
+                  <span className="text-[11px]" style={{ color: "var(--muted)" }}>{g.nota}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+          {periodoSel.interrumpido && (
+            <p className="mt-2 text-[11px]" style={{ color: "var(--sand)" }}>
+              El filtro usa las fechas legales del período, no la permanencia real de cada
+              persona: dentro de este período hubo suspensiones o encargos, así que los
+              contratos no corresponden todos al mismo gobernante.
+            </p>
+          )}
+        </div>
+      )}
 
       {/* barra de resultados */}
       <div className="flex flex-wrap items-center justify-between gap-2 px-1 text-xs">

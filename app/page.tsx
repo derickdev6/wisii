@@ -28,7 +28,7 @@ const VISTAS: [Vista, string][] = [
 
 interface Datos {
   contratos: Contrato[]; meta: Meta;
-  isla: FeatureCollection; barrios: FeatureCollection;
+  islas: FeatureCollection; barrios: FeatureCollection;
 }
 
 export default function Page() {
@@ -52,7 +52,7 @@ export default function Page() {
   }
   if (!d) return <Cargando texto="Cargando contratos…" />;
 
-  const { meta, contratos, isla, barrios } = d;
+  const { meta, contratos, islas, barrios } = d;
 
   return (
     <main className="mx-auto max-w-[1400px] px-4 py-5 sm:px-6">
@@ -101,7 +101,7 @@ export default function Page() {
 
       <section className="mt-4">
         {vista === "mapa" && (
-          <MapaCalor contratos={contratos} isla={isla} barrios={barrios} meta={meta}
+          <MapaCalor contratos={contratos} islas={islas} barrios={barrios} meta={meta}
                      onAbrirContrato={setAbierto} />
         )}
         {vista === "contratos" && (

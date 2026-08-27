@@ -50,11 +50,11 @@ async function json<T>(url: string): Promise<T> {
 }
 
 export async function cargarTodo() {
-  const [raw, meta, isla, barrios] = await Promise.all([
+  const [raw, meta, islas, barrios] = await Promise.all([
     json<ContratosRaw>("/data/contratos.json"),
     json<Meta>("/data/meta.json"),
-    json<FeatureCollection>("/data/isla.geojson"),
+    json<FeatureCollection>("/data/islas.geojson"),
     json<FeatureCollection>("/data/barrios.json"),
   ]);
-  return { contratos: decodificar(raw), meta, isla, barrios };
+  return { contratos: decodificar(raw), meta, islas, barrios };
 }

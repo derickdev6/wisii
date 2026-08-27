@@ -1,0 +1,221 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-08-26T23:53:36Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 306382403,
+  "lat": 13.3809185,
+  "lon": -81.3695281,
+  "tags": {
+    "loc_name": "Town",
+    "name": "Santa Isabel",
+    "place": "hamlet",
+    "source": "wikipedia"
+  }
+},
+{
+  "type": "node",
+  "id": 703497634,
+  "lat": 13.3476627,
+  "lon": -81.3926894,
+  "tags": {
+    "divipola": "88001",
+    "name": "Fresh Water",
+    "place": "hamlet",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497636,
+  "lat": 13.3586344,
+  "lon": -81.3906458,
+  "tags": {
+    "divipola": "88001",
+    "name": "San Felipe Lazy Hill",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 0aa9a03cbd3fb79cf83d80cee8fbfb64",
+    "place": "village",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497637,
+  "lat": 13.3309189,
+  "lon": -81.3899120,
+  "tags": {
+    "divipola": "88001",
+    "name": "South West Bay",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497659,
+  "lat": 13.3785719,
+  "lon": -81.3635130,
+  "tags": {
+    "divipola": "88001",
+    "name": "Boxton",
+    "note": "GEOPUNTO, PUNTO DE INTERES, b2f961b8223523125db3f78ff9a0c86f",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497662,
+  "lat": 13.3743608,
+  "lon": -81.3628714,
+  "tags": {
+    "divipola": "88001",
+    "name": "The Mountain",
+    "note": "GEOPUNTO, PUNTO DE INTERES, b5c3ffbe07e7b8c968abf907fb62051d",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703497663,
+  "lat": 13.3710120,
+  "lon": -81.3660702,
+  "tags": {
+    "divipola": "88001",
+    "name": "Big Hill",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 04621170b7c458ab66b483b0b9cc6792",
+    "place": "locality",
+    "source": "OCHA Colombia 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703525798,
+  "lat": 13.3515796,
+  "lon": -81.3581994,
+  "tags": {
+    "name": "Bailey",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 4958017c6a909c267f7ad721e07af5d9",
+    "place": "hamlet",
+    "source": "OCHA COLOMBIA 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703525804,
+  "lat": 13.3294522,
+  "lon": -81.3767036,
+  "tags": {
+    "name": "Bottom House",
+    "place": "hamlet",
+    "source": "OCHA COLOMBIA 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703525811,
+  "lat": 13.3717835,
+  "lon": -81.3793323,
+  "tags": {
+    "name": "Davidson Point",
+    "note": "GEOPUNTO, PUNTO DE INTERES, c0e4a156a465b2897fea18a1c6325375",
+    "place": "locality",
+    "source": "OCHA COLOMBIA 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703525820,
+  "lat": 13.3336938,
+  "lon": -81.3657539,
+  "tags": {
+    "name": "Aguas Mansas",
+    "name:en": "Smooth Water",
+    "note": "GEOPUNTO, PUNTO DE INTERES, 0138e183fc14da49ad5e4bca1977f0c9",
+    "place": "hamlet",
+    "source": "OCHA COLOMBIA 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703525822,
+  "lat": 13.3463285,
+  "lon": -81.3564090,
+  "tags": {
+    "name": "Rocky Point",
+    "place": "village",
+    "source": "OCHA COLOMBIA 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 703525826,
+  "lat": 13.3484565,
+  "lon": -81.3586915,
+  "tags": {
+    "name": "Goat Hill",
+    "note": "GEOPUNTO, PUNTO DE INTERES, f2d09b69911ef611d434f79b304a00d4",
+    "place": "locality",
+    "source": "OCHA COLOMBIA 2010"
+  }
+},
+{
+  "type": "node",
+  "id": 3429298911,
+  "lat": 13.3751256,
+  "lon": -81.3694048,
+  "tags": {
+    "name": "Freetown",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 3429298916,
+  "lat": 13.3677067,
+  "lon": -81.3771093,
+  "tags": {
+    "name": "Old Town",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6994122103,
+  "lat": 13.3853657,
+  "lon": -81.3664915,
+  "tags": {
+    "name": "Jones Point",
+    "place": "locality"
+  }
+},
+{
+  "type": "node",
+  "id": 13143906478,
+  "lat": 13.3929326,
+  "lon": -81.3757687,
+  "tags": {
+    "name": "Brooke Fort",
+    "place": "locality"
+  }
+},
+{
+  "type": "node",
+  "id": 13143982934,
+  "lat": 13.3936950,
+  "lon": -81.3694044,
+  "tags": {
+    "name": "Darlys Fort",
+    "place": "locality"
+  }
+}
+
+  ]
+}

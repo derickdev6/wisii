@@ -24,10 +24,10 @@ function leerVar(el: HTMLElement, nombre: string, fallback: string) {
 }
 
 export default function MapaCalor({
-  contratos, isla, barrios, meta, onAbrirContrato,
+  contratos, islas, barrios, meta, onAbrirContrato,
 }: {
   contratos: Contrato[];
-  isla: FeatureCollection;
+  islas: FeatureCollection;
   barrios: FeatureCollection;
   meta: Meta;
   onAbrirContrato: (c: Contrato) => void;
@@ -58,8 +58,8 @@ export default function MapaCalor({
   useEffect(() => {
     if (!cont.current || mapRef.current) return;
     const el = cont.current;
-    const bbox = (isla.features[0].properties?.bbox as [number, number, number, number]) ?? [
-      -81.7357, 12.4803, -81.6873, 12.5949,
+    const bbox = (islas.bbox as [number, number, number, number]) ?? [
+      -81.7357, 12.4803, -81.6753, 12.5949,
     ];
 
     const map = new maplibregl.Map({
@@ -85,11 +85,26 @@ export default function MapaCalor({
     }), "bottom-right");
 
     map.on("load", () => {
-      map.addSource("isla", { type: "geojson", data: isla });
-      map.addLayer({ id: "isla-fill", type: "fill", source: "isla",
+      map.addSource("islas", { type: "geojson", data: islas });
+      map.addLayer({ id: "islas-fill", type: "fill", source: "islas",
         paint: { "fill-color": leerVar(el, "--island", "#e3ded2"), "fill-opacity": 1 } });
-      map.addLayer({ id: "isla-line", type: "line", source: "isla",
+      map.addLayer({ id: "islas-line", type: "line", source: "islas",
         paint: { "line-color": leerVar(el, "--island-line", "#c3bba7"), "line-width": 1.2 } });
+
+      // nombre de cada isla, como marcador fijo sobre su centroide
+      for (const f of islas.features) {
+        if (f.geometry.type !== "Polygon") continue;
+        const ring = f.geometry.coordinates[0] as [number, number][];
+        const c = ring.reduce((a, p) => [a[0] + p[0], a[1] + p[1]], [0, 0]);
+        const centro: [number, number] = [c[0] / ring.length, c[1] / ring.length];
+        const nom = document.createElement("div");
+        nom.textContent = (f.properties?.nombre as string) ?? "";
+        nom.style.cssText = `font:700 9px/1 ui-sans-serif,system-ui;letter-spacing:.09em;
+          text-transform:uppercase;color:${leerVar(el, "--island-line", "#c3bba7")};
+          white-space:nowrap;pointer-events:none;opacity:.9`;
+        new maplibregl.Marker({ element: nom, anchor: "center" })
+          .setLngLat(centro).addTo(map);
+      }
 
       map.addSource("barrios", { type: "geojson", data: barrios });
       map.addLayer({
@@ -118,12 +133,21 @@ export default function MapaCalor({
       map.on("mouseenter", "barrios-hit", () => { map.getCanvas().style.cursor = "pointer"; });
       map.on("mouseleave", "barrios-hit", () => { map.getCanvas().style.cursor = ""; });
 
+      // El componente se monta de forma diferida (dynamic import) y el contenedor
+      // puede tener un ancho transitorio: sin esto el canvas queda del tamaño
+      // equivocado y fitBounds calcula un zoom absurdo.
+      map.resize();
+      map.fitBounds(bbox, { padding: 44, duration: 0 });
       setListo(true);
     });
 
+    // mantiene el canvas sincronizado al cambiar de pestaña o de tamaño de ventana
+    const ro = new ResizeObserver(() => map.resize());
+    ro.observe(el);
+
     mapRef.current = map;
-    return () => { map.remove(); mapRef.current = null; };
-  }, [isla, barrios, maximos.n]);
+    return () => { ro.disconnect(); map.remove(); mapRef.current = null; };
+  }, [islas, barrios, maximos.n]);
 
   // --- cambiar el peso del heatmap ---
   useEffect(() => {
@@ -238,6 +262,13 @@ export default function MapaCalor({
                 {label}
               </button>
             ))}
+        </div>
+
+        {/* la distancia real entre islas es de ~90 km: se declara para no engañar */}
+        <div className="pointer-events-none absolute bottom-3 right-3 max-w-[190px] rounded-lg border px-2.5 py-1.5 text-[10px] leading-snug backdrop-blur"
+             style={{ borderColor: "var(--line)", background: "color-mix(in srgb, var(--surface) 88%, transparent)", color: "var(--muted)" }}>
+          Providencia y Santa Catalina conservan forma y tamaño reales, pero se dibujan
+          al lado: la distancia entre islas no está a escala.
         </div>
 
         {/* leyenda */}

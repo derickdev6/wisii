@@ -5,8 +5,11 @@ import type { Gazetteer } from "@/lib/types";
 
 const RUTA = path.join(process.cwd(), "data", "gazetteer.json");
 
-// La isla completa. Cualquier coordenada fuera de aquí es un error de captura.
-const BBOX = { lat: [12.44, 12.62], lon: [-81.76, -81.66] } as const;
+// Una caja por isla: cualquier coordenada fuera de la suya es un error de captura.
+const BBOX = {
+  "San Andrés":  { lat: [12.44, 12.62], lon: [-81.76, -81.66] },
+  Providencia:   { lat: [13.26, 13.44], lon: [-81.46, -81.28] },
+} as const;
 
 /** true cuando corre en Vercel, donde el filesystem es de solo lectura. */
 const soloLectura = () => Boolean(process.env.VERCEL);
@@ -39,9 +42,14 @@ export async function POST(req: Request) {
     if (typeof b?.lat !== "number" || typeof b?.lon !== "number") {
       return NextResponse.json({ error: `'${nombre}' no tiene lat/lon numéricos` }, { status: 400 });
     }
-    if (b.lat < BBOX.lat[0] || b.lat > BBOX.lat[1] || b.lon < BBOX.lon[0] || b.lon > BBOX.lon[1]) {
+    const isla = (b.isla ?? "San Andrés") as keyof typeof BBOX;
+    const caja = BBOX[isla];
+    if (!caja) {
+      return NextResponse.json({ error: `'${nombre}' tiene una isla desconocida: ${b.isla}` }, { status: 400 });
+    }
+    if (b.lat < caja.lat[0] || b.lat > caja.lat[1] || b.lon < caja.lon[0] || b.lon > caja.lon[1]) {
       return NextResponse.json(
-        { error: `'${nombre}' queda fuera de la isla (${b.lat}, ${b.lon})` }, { status: 400 });
+        { error: `'${nombre}' queda fuera de ${isla} (${b.lat}, ${b.lon})` }, { status: 400 });
     }
   }
 

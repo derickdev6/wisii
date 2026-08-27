@@ -6,7 +6,14 @@ import type { Gazetteer, Meta } from "@/lib/types";
 import { numero } from "@/lib/format";
 import { Chip, Nota } from "./ui";
 
-const CENTRO: [number, number] = [-81.7115, 12.5426];
+/** Centro y zoom por isla. El editor trabaja sobre coordenadas REALES (imagen
+ *  satelital), no sobre las desplazadas que usa el mapa de calor. */
+const ISLAS = {
+  "San Andrés":  { centro: [-81.7115, 12.5426] as [number, number], zoom: 12.2 },
+  "Providencia": { centro: [-81.3720, 13.3550] as [number, number], zoom: 12.8 },
+} as const;
+
+type Isla = keyof typeof ISLAS;
 
 const BASES = {
   sat: {
@@ -41,6 +48,7 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
   const [listo, setListo] = useState(false);
   /** texto pendiente en proceso de convertirse en barrio nuevo */
   const [creando, setCreando] = useState<{ alias: string; nombre: string } | null>(null);
+  const [isla, setIsla] = useState<Isla>("San Andrés");
 
   const porBarrio = meta.por_barrio ?? {};
   const pendientes = meta.pendientes ?? [];
@@ -72,14 +80,26 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
           { id: "base-calle", type: "raster", source: "calle", layout: { visibility: "none" } },
         ],
       },
-      center: CENTRO, zoom: 12.2, maxZoom: 19, minZoom: 10, dragRotate: false,
+      center: ISLAS["San Andrés"].centro, zoom: ISLAS["San Andrés"].zoom,
+      maxZoom: 19, minZoom: 10, dragRotate: false,
     });
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
     map.addControl(new maplibregl.ScaleControl({ maxWidth: 100, unit: "metric" }), "bottom-left");
-    map.on("load", () => setListo(true));
+    map.on("load", () => { map.resize(); setListo(true); });
+
+    const ro = new ResizeObserver(() => map.resize());
+    ro.observe(cont.current);
+
     mapRef.current = map;
-    return () => { map.remove(); mapRef.current = null; };
+    return () => { ro.disconnect(); map.remove(); mapRef.current = null; };
   }, [hayGaz]);
+
+  function cambiarIsla(i: Isla) {
+    setIsla(i);
+    setSel(null);
+    setCreando(null);
+    mapRef.current?.flyTo({ center: ISLAS[i].centro, zoom: ISLAS[i].zoom, duration: 900 });
+  }
 
   useEffect(() => {
     const map = mapRef.current;
@@ -106,14 +126,20 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
   }, [listo, sel, creando]);
 
   // --- marcadores ---
-  const nombres = useMemo(() => (gaz ? Object.keys(gaz.barrios).sort() : []), [gaz]);
+  const todos = useMemo(() => (gaz ? Object.keys(gaz.barrios).sort() : []), [gaz]);
+  const nombres = useMemo(
+    () => todos.filter((n) => (gaz?.barrios[n].isla ?? "San Andrés") === isla),
+    [todos, gaz, isla]);
 
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !listo || !gaz) return;
 
+    // fuera los marcadores borrados o los de la otra isla
     for (const [nombre, m] of marcadores.current) {
-      if (!gaz.barrios[nombre]) { m.remove(); marcadores.current.delete(nombre); }
+      if (!gaz.barrios[nombre] || !nombres.includes(nombre)) {
+        m.remove(); marcadores.current.delete(nombre);
+      }
     }
 
     for (const nombre of nombres) {
@@ -149,12 +175,14 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
         white-space:nowrap;background:${activo ? "#3ec7c0" : "rgba(8,24,30,.78)"};
         color:${activo ? "#06222a" : "#e8f2f4"};opacity:${activo ? 1 : 0.9}`;
     }
-  }, [gaz, nombres, sel, listo, porBarrio]);
+  }, [gaz, nombres, sel, listo, porBarrio, isla]);
 
   function mover(nombre: string, lat: number, lon: number) {
     setGaz((g) => g && ({
       ...g,
-      barrios: { ...g.barrios, [nombre]: { lat: +lat.toFixed(5), lon: +lon.toFixed(5), src: "manual" } },
+      barrios: { ...g.barrios, [nombre]: {
+        lat: +lat.toFixed(5), lon: +lon.toFixed(5), src: "manual",
+        isla: g.barrios[nombre]?.isla ?? isla } },
     }));
     setSucio(true);
   }
@@ -162,7 +190,8 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
   function crear(nombre: string, alias: string, lat: number, lon: number) {
     setGaz((g) => g && ({
       ...g,
-      barrios: { ...g.barrios, [nombre]: { lat: +lat.toFixed(5), lon: +lon.toFixed(5), src: "manual" } },
+      barrios: { ...g.barrios, [nombre]: {
+        lat: +lat.toFixed(5), lon: +lon.toFixed(5), src: "manual", isla } },
       alias: { ...g.alias, [alias]: nombre },
     }));
     setSel(nombre); setSucio(true);
@@ -215,6 +244,7 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
   }, [gaz, nombres, filtro, porBarrio]);
 
   const aprox = nombres.filter((n) => gaz?.barrios[n].src === "aprox").length;
+  const enOtraIsla = todos.length - nombres.length;
 
   if (!gaz) return <div className="p-8 text-sm" style={{ color: "var(--muted)" }}>Cargando gazetteer…</div>;
 
@@ -224,14 +254,26 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
            style={{ borderColor: "var(--line)" }}>
         <div ref={cont} className="h-[72vh] min-h-[480px] w-full" />
 
-        <div className="absolute left-3 top-3 flex rounded-lg border p-0.5 text-xs backdrop-blur"
-             style={{ borderColor: "var(--line)", background: "color-mix(in srgb, var(--surface) 88%, transparent)" }}>
+        <div className="absolute left-3 top-3 flex gap-2">
+          <div className="flex rounded-lg border p-0.5 text-xs backdrop-blur"
+               style={{ borderColor: "var(--accent)", background: "color-mix(in srgb, var(--surface) 88%, transparent)" }}>
+            {(Object.keys(ISLAS) as Isla[]).map((k) => (
+              <button key={k} onClick={() => cambiarIsla(k)}
+                      className="rounded-md px-2.5 py-1 font-medium"
+                      style={isla === k ? { background: "var(--accent)", color: "var(--accent-ink)" } : { color: "var(--muted)" }}>
+                {k}
+              </button>
+            ))}
+          </div>
+          <div className="flex rounded-lg border p-0.5 text-xs backdrop-blur"
+               style={{ borderColor: "var(--line)", background: "color-mix(in srgb, var(--surface) 88%, transparent)" }}>
           {([["sat", "Satélite"], ["calle", "Calles"]] as [Base, string][]).map(([k, l]) => (
             <button key={k} onClick={() => setBase(k)} className="rounded-md px-2.5 py-1 font-medium"
                     style={base === k ? { background: "var(--accent)", color: "var(--accent-ink)" } : { color: "var(--muted)" }}>
               {l}
             </button>
           ))}
+          </div>
         </div>
 
         {(sel || creando) && (
@@ -253,7 +295,7 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
       <div className="flex flex-col gap-3">
         <div className="rounded-xl border p-3" style={{ borderColor: "var(--line)", background: "var(--surface)" }}>
           <div className="flex items-center justify-between gap-2">
-            <div className="text-sm font-semibold">Ubicación de barrios</div>
+            <div className="text-sm font-semibold">Barrios de {isla}</div>
             <div className="flex gap-1.5">
               <button onClick={descargar} className="rounded-md border px-2 py-1 text-xs"
                       style={{ borderColor: "var(--line)", color: "var(--ink-soft)" }}>Descargar</button>
@@ -268,6 +310,7 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
             <Chip>{nombres.length} barrios</Chip>
             <Chip tono={aprox ? "alerta" : "ok"}>{aprox} aproximados</Chip>
             <Chip>{Object.keys(gaz.alias).length} alias</Chip>
+            <Chip>{enOtraIsla} en la otra isla</Chip>
           </div>
           {!editable && (
             <p className="mt-2 text-[11px]" style={{ color: "var(--coral)" }}>
@@ -283,7 +326,7 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
 
         <div className="flex gap-1 rounded-lg border p-0.5 text-xs"
              style={{ borderColor: "var(--line)", background: "var(--surface)" }}>
-          {([["barrios", `Barrios (${nombres.length})`],
+          {([["barrios", `${isla} (${nombres.length})`],
              ["pendientes", `Sin reconocer (${pendientes.length})`]] as const).map(([k, l]) => (
             <button key={k} onClick={() => setTab(k)}
                     className="flex-1 rounded-md px-2 py-1.5 font-medium"
