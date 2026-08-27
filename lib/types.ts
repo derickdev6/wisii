@@ -80,3 +80,19 @@ export interface Gazetteer {
   barrios: Record<string, { lat: number; lon: number; src: string; isla?: string }>;
   alias: Record<string, string>;
 }
+
+/** public/data/recientes.json — lo firmado en los últimos 30 días publicados. */
+export interface Recientes {
+  desde: string;
+  hasta: string;
+  dias: number;
+  n: number;
+  valor_total: number;
+  proveedores: number;
+  actualizado: string;
+  contratos: {
+    id: string; fuente: string; firma: string; proveedor: string;
+    valor: number; objeto: string; estado: string;
+    barrio: string | null; enlace: string;
+  }[];
+}

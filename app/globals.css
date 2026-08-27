@@ -5,57 +5,74 @@
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
 }
 
+/* ---------------------------------------------------------------------------
+   Paleta del proyecto
+     0d1821  azul noche      344966  azul acero     b4cded  azul claro
+     f0f4ef  hueso           bfcc94  salvia         ff7154  coral (acción)
+     111a1b  negro base      f1faff  blanco base
+   Los tokens se definen completos en :root (modo claro) y solo se redefinen
+   los que cambian en oscuro, para que el toggle funcione en ambos sentidos.
+--------------------------------------------------------------------------- */
 :root {
-  --sea:      #f2f6f7;
-  --surface:  #ffffff;
-  --raised:   #f7fafb;
-  --line:     #dde6e9;
-  --line-soft:#eaf0f2;
-  --ink:      #0d2430;
-  --ink-soft: #40606d;
-  --muted:    #6d8894;
-  --accent:   #0d7d8c;
-  --accent-ink:#ffffff;
-  --coral:    #d1583f;
-  --sand:     #b8862f;
-  --island:   #e3ded2;
-  --island-line: #c3bba7;
+  --sea:        #f1faff;
+  --surface:    #ffffff;
+  --raised:     #f0f4ef;
+  --line:       #cfdce8;
+  --line-soft:  #e4edf4;
+  --ink:        #111a1b;
+  --ink-soft:   #344966;
+  --muted:      #6c8296;
+  --accent:     #344966;
+  --accent-ink: #f1faff;
+  --cta:        #ff7154;
+  --cta-ink:    #ffffff;
+  --coral:      #d94a2f;   /* coral oscurecido: legible sobre fondo claro */
+  --sand:       #6f7f45;   /* salvia oscurecida, misma razón */
+  --island:     #e6eadf;
+  --island-line:#bfcc94;
+  --sombra:     0 1px 3px rgba(13, 24, 33, .1), 0 1px 2px rgba(13, 24, 33, .06);
 }
 
 :root:not([data-theme="light"]) {
   @media (prefers-color-scheme: dark) {
-    --sea:      #071519;
-    --surface:  #0d2028;
-    --raised:   #122b34;
-    --line:     #1e3d47;
-    --line-soft:#173039;
-    --ink:      #e8f2f4;
-    --ink-soft: #a8c4cc;
-    --muted:    #6f909b;
-    --accent:   #3ec7c0;
-    --accent-ink:#06222a;
-    --coral:    #f4795c;
-    --sand:     #e0b455;
-    --island:   #1d3a3c;
-    --island-line: #2f5a58;
+    --sea:        #0d1821;
+    --surface:    #12202c;
+    --raised:     #1a2c3a;
+    --line:       #294057;
+    --line-soft:  #1f3346;
+    --ink:        #f1faff;
+    --ink-soft:   #b4cded;
+    --muted:      #7d99b3;
+    --accent:     #b4cded;
+    --accent-ink: #0d1821;
+    --cta:        #ff7154;
+    --cta-ink:    #111a1b;
+    --coral:      #ff7154;
+    --sand:       #bfcc94;
+    --island:     #24394a;
+    --island-line:#3d5a72;
+    --sombra:     0 1px 3px rgba(0, 0, 0, .4), 0 1px 2px rgba(0, 0, 0, .3);
   }
 }
 
 :root[data-theme="dark"] {
-  --sea:      #071519;
-  --surface:  #0d2028;
-  --raised:   #122b34;
-  --line:     #1e3d47;
-  --line-soft:#173039;
-  --ink:      #e8f2f4;
-  --ink-soft: #a8c4cc;
-  --muted:    #6f909b;
-  --accent:   #3ec7c0;
-  --accent-ink:#06222a;
-  --coral:    #f4795c;
-  --sand:     #e0b455;
-  --island:   #1d3a3c;
-  --island-line: #2f5a58;
+  --sea:        #0d1821;
+  --surface:    #12202c;
+  --raised:     #1a2c3a;
+  --line:       #294057;
+  --line-soft:  #1f3346;
+  --ink:        #f1faff;
+  --ink-soft:   #b4cded;
+  --muted:      #7d99b3;
+  --accent:     #b4cded;
+  --accent-ink: #0d1821;
+  --cta:        #ff7154;
+  --cta-ink:    #111a1b;
+  --coral:      #ff7154;
+  --sand:       #bfcc94;
+  --island:     #24394a;
+  --island-line:#3d5a72;
+  --sombra:     0 1px 3px rgba(0, 0, 0, .4), 0 1px 2px rgba(0, 0, 0, .3);
 }
 
 html, body { height: 100%; }
@@ -73,5 +90,16 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 
+::selection { background: color-mix(in srgb, var(--cta) 30%, transparent); }
+
+:focus-visible {
+  outline: 2px solid var(--cta);
+  outline-offset: 2px;
+}
+
 .maplibregl-ctrl-attrib { font-size: 10px; }
 .maplibregl-popup-content { background: var(--surface); color: var(--ink); border-radius: 10px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

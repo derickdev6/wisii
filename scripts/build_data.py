@@ -11,7 +11,7 @@ Salida en public/data/:
 """
 import csv, json, os, re, sys, unicodedata
 from collections import Counter, defaultdict
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 HERE   = os.path.dirname(os.path.abspath(__file__))
 DATA   = os.path.join(HERE, "..", "data")
@@ -333,6 +333,31 @@ def main():
     }
     json.dump(meta, open(os.path.join(OUTDIR, "meta.json"), "w"),
               ensure_ascii=False, separators=(",", ":"))
+
+    # --- recientes.json: lo firmado en los últimos 30 días ---
+    # La portada lo carga en vez de contratos.json (10 MB). La ventana se mide
+    # desde la última firma publicada, no desde hoy, para que nunca salga vacía
+    # aunque el SECOP se retrase en publicar.
+    hasta_r = firmas[-1]
+    desde_r = (datetime.strptime(hasta_r, "%Y-%m-%d") - timedelta(days=30)).strftime("%Y-%m-%d")
+    recientes = [r for r in rows if desde_r <= r["firma"] <= hasta_r]
+    recientes.sort(key=lambda r: (-r["valor"], r["firma"]))
+    barrio_de = {id(r): b for r, b in zip(rows, asignado)}
+    json.dump({
+        "desde": desde_r, "hasta": hasta_r, "dias": 30,
+        "n": len(recientes),
+        "valor_total": sum(r["valor"] for r in recientes),
+        "proveedores": len({r["documento"] for r in recientes if r["documento"]}),
+        "actualizado": meta["actualizado"],
+        "contratos": [{
+            "id": r["id"], "fuente": r["fuente"], "firma": r["firma"],
+            "proveedor": r["proveedor"], "valor": r["valor"], "objeto": r["objeto"],
+            "estado": r["estado"], "barrio": barrio_de.get(id(r)), "enlace": r["enlace"],
+        } for r in recientes[:40]],
+    }, open(os.path.join(OUTDIR, "recientes.json"), "w"),
+       ensure_ascii=False, separators=(",", ":"))
+    print(f"\nrecientes: {len(recientes)} contratos entre {desde_r} y {hasta_r}"
+          f"  ({sum(r['valor'] for r in recientes)/1e6:,.0f} MM COP)")
 
     kb = lambda p: os.path.getsize(os.path.join(OUTDIR, p)) / 1024
     print(f"SECOP II       {n2:>6}")

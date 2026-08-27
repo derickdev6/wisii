@@ -19,13 +19,30 @@ const ORDENES: [Orden, string][] = [
   ["valor-asc", "Menor valor"],
 ];
 
-function unicos(cs: Contrato[], f: (c: Contrato) => string | null) {
+type Pred = (c: Contrato) => boolean;
+
+/**
+ * Cuenta los valores de una faceta sobre los contratos que pasan todos los
+ * filtros MENOS el suyo. Así, al elegir un gobierno, los demás selectores
+ * muestran cuántos contratos hay dentro de ese período y no en el total.
+ * El valor ya elegido se conserva aunque quede en cero, para que el <select>
+ * no aparezca vacío.
+ */
+function faceta(
+  cs: Contrato[], preds: Record<string, Pred>, dim: string,
+  clave: (c: Contrato) => string | null, elegido: string,
+): [string, number][] {
+  const otros = Object.entries(preds).filter(([k]) => k !== dim).map(([, f]) => f);
   const m = new Map<string, number>();
   for (const c of cs) {
-    const v = f(c);
+    let ok = true;
+    for (const f of otros) if (!f(c)) { ok = false; break; }
+    if (!ok) continue;
+    const v = clave(c);
     if (v) m.set(v, (m.get(v) ?? 0) + 1);
   }
-  return [...m.entries()].sort((a, b) => b[1] - a[1]);
+  if (elegido && !m.has(elegido)) m.set(elegido, 0);
+  return [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
 }
 
 function Selector({ etiqueta, valor, onChange, opciones }: {
@@ -87,32 +104,50 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
   const setDesdeManual = (v: string) => { setGobierno(""); setDesde(v); };
   const setHastaManual = (v: string) => { setGobierno(""); setHasta(v); };
 
-  const opciones = useMemo(() => ({
-    fuente: unicos(contratos, (c) => c.fuente),
-    estado: unicos(contratos, (c) => c.estado),
-    tipo: unicos(contratos, (c) => c.tipo),
-    modalidad: unicos(contratos, (c) => c.modalidad),
-    barrio: unicos(contratos, (c) => c.barrio),
-  }), [contratos]);
-
-  const filtrados = useMemo(() => {
+  /** Un predicado por dimensión activa; las inactivas no entran. */
+  const preds = useMemo(() => {
+    const p: Record<string, Pred> = {};
+    if (fuente) p.fuente = (c) => c.fuente === fuente;
+    if (estado) p.estado = (c) => c.estado === estado;
+    if (tipo) p.tipo = (c) => c.tipo === tipo;
+    if (modalidad) p.modalidad = (c) => c.modalidad === modalidad;
+    if (barrio) p.barrio = (c) => c.barrio === barrio;
+    if (desde || hasta) {
+      p.fechas = (c) => (!desde || c.firma >= desde) && (!hasta || c.firma <= hasta);
+    }
+    const min = minValor ? Number(minValor) : 0;
+    if (min) p.valor = (c) => c.valor >= min;
     // varias palabras = AND, así "profesional loma" acota de verdad
     const terminos = normalizar(qd).split(/\s+/).filter(Boolean);
-    const min = minValor ? Number(minValor) : 0;
+    if (terminos.length) p.q = (c) => terminos.every((t) => c.busq.includes(t));
+    return p;
+  }, [qd, fuente, estado, tipo, modalidad, barrio, desde, hasta, minValor]);
 
-    const out = contratos.filter((c) => {
-      if (fuente && c.fuente !== fuente) return false;
-      if (estado && c.estado !== estado) return false;
-      if (tipo && c.tipo !== tipo) return false;
-      if (modalidad && c.modalidad !== modalidad) return false;
-      if (barrio && c.barrio !== barrio) return false;
-      if (desde && c.firma < desde) return false;
-      if (hasta && c.firma > hasta) return false;
-      if (min && c.valor < min) return false;
-      for (const t of terminos) if (!c.busq.includes(t)) return false;
-      return true;
-    });
+  /** Contratos por período, ignorando el propio filtro de fechas. */
+  const conteoPeriodos = useMemo(() => {
+    const otros = Object.entries(preds).filter(([k]) => k !== "fechas").map(([, f]) => f);
+    const m = new Map<string, number>();
+    for (const c of contratos) {
+      let ok = true;
+      for (const f of otros) if (!f(c)) { ok = false; break; }
+      if (!ok) continue;
+      const p = periodos.find((x) => c.firma >= x.desde && c.firma <= x.hasta);
+      if (p) m.set(p.id, (m.get(p.id) ?? 0) + 1);
+    }
+    return m;
+  }, [contratos, preds, periodos]);
 
+  const opciones = useMemo(() => ({
+    fuente: faceta(contratos, preds, "fuente", (c) => c.fuente, fuente),
+    estado: faceta(contratos, preds, "estado", (c) => c.estado, estado),
+    tipo: faceta(contratos, preds, "tipo", (c) => c.tipo, tipo),
+    modalidad: faceta(contratos, preds, "modalidad", (c) => c.modalidad, modalidad),
+    barrio: faceta(contratos, preds, "barrio", (c) => c.barrio, barrio),
+  }), [contratos, preds, fuente, estado, tipo, modalidad, barrio]);
+
+  const filtrados = useMemo(() => {
+    const fs = Object.values(preds);
+    const out = contratos.filter((c) => fs.every((f) => f(c)));
     const cmp: Record<Orden, (a: Contrato, b: Contrato) => number> = {
       "firma-desc": (a, b) => (a.firma < b.firma ? 1 : a.firma > b.firma ? -1 : 0),
       "firma-asc": (a, b) => (a.firma > b.firma ? 1 : a.firma < b.firma ? -1 : 0),
@@ -120,7 +155,7 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
       "valor-asc": (a, b) => a.valor - b.valor,
     };
     return out.sort(cmp[orden]);
-  }, [contratos, qd, fuente, estado, tipo, modalidad, barrio, desde, hasta, minValor, orden]);
+  }, [contratos, preds, orden]);
 
   const total = useMemo(() => filtrados.reduce((s, c) => s + c.valor, 0), [filtrados]);
 
@@ -184,7 +219,9 @@ export default function Listado({ contratos, onAbrirContrato, barrioInicial }: {
                              background: "var(--surface)", color: "var(--ink)" }}>
               <option value="">Todos los períodos</option>
               {periodos.map((p) => (
-                <option key={p.id} value={p.id}>{etiquetaPeriodo(p)} · {titular(p)}</option>
+                <option key={p.id} value={p.id}>
+                  {etiquetaPeriodo(p)} · {titular(p)} ({numero(conteoPeriodos.get(p.id) ?? 0)})
+                </option>
               ))}
             </select>
           </label>

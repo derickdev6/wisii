@@ -5,8 +5,15 @@ de San Andrés, Providencia y Santa Catalina** (NIT 892400038), a partir de los 
 abiertos de `datos.gov.co`. Cubre **37.955 contratos entre marzo de 2015 y agosto de 2026**,
 uniendo los dos sistemas de contratación pública del país.
 
-Tres vistas: mapa de calor, listado con búsqueda integral, y un editor para corregir la
-ubicación de los barrios.
+Dos rutas: una **portada** (`/`) que explica el proyecto, muestra lo firmado en el último
+mes y lleva al explorador; y el **explorador** (`/contratos`) con tres vistas: mapa de calor,
+listado con búsqueda integral, y un editor para corregir la ubicación de los barrios.
+
+La portada se prerenderiza en el build leyendo `public/data/*.json` desde el sistema de
+archivos, así que sale con 623 B de JavaScript y no descarga los 10 MB de contratos: eso
+solo lo hace `/contratos`. Los datos del último mes viven en `public/data/recientes.json`
+y la ventana se mide desde la última firma publicada, no desde hoy, para que nunca quede
+vacía si el SECOP se retrasa.
 
 ## Las dos fuentes
 
@@ -103,6 +110,32 @@ localidades de Providencia, no de San Andrés — yo las había colocado a mano 
 con coordenadas inventadas. OpenStreetMap las ubica en Providencia, así que ahora usan sus
 coordenadas verificables. Si el conocimiento local dice otra cosa, se corrigen en el editor.
 
+## Filtros facetados
+
+Los contadores de cada selector se calculan sobre los contratos que pasan **todos los demás
+filtros**, no sobre el total. Al elegir el gobierno 2020-2023, «Contratación directa» pasa
+de 31.531 a 17.586 y «San Luis» de 1.962 a 1.130: el número que ves es el que vas a obtener
+si aplicás ese filtro. El valor ya seleccionado se conserva en la lista aunque quede en
+cero, para que el desplegable no aparezca vacío.
+
+## Paleta y tema
+
+Tokens CSS definidos completos en `:root` (claro) y redefinidos en `@media (prefers-color-scheme: dark)`
+y en `:root[data-theme="dark"]`, de modo que el conmutador funciona en ambos sentidos y
+respeta la preferencia del sistema cuando no hay elección explícita. Un script inline en
+`app/layout.tsx` aplica el tema antes del primer pintado para evitar el parpadeo.
+
+| | Claro | Oscuro |
+|---|---|---|
+| Fondo | `#f1faff` | `#0d1821` |
+| Texto | `#111a1b` | `#f1faff` |
+| Acento | `#344966` | `#b4cded` |
+| Acción | `#ff7154` | `#ff7154` |
+
+Los demás colores de la paleta (`#f0f4ef` hueso, `#bfcc94` salvia) se usan en superficies
+elevadas, en la silueta de las islas y en la rampa del mapa de calor, que va de azul claro
+a salvia y de ahí a coral.
+
 ## Cómo correrlo
 
 ```bash
@@ -172,7 +205,10 @@ scripts/geocode_barrios.py geocodificación inicial contra OSM/Nominatim
 scripts/build_data.py      une ambas fuentes + gazetteer -> public/data/*.json
 data/gazetteer.json        barrios (con isla) y alias — editable a mano o desde el editor
 lib/gobiernos.ts           períodos constitucionales de la Gobernación
-app/, components/, lib/    la aplicación Next.js
+app/page.tsx               portada (prerenderizada en el build)
+app/contratos/page.tsx     explorador: mapa, listado y editor
+lib/legal.ts               responsable, fuentes y marco normativo del pie de página
+components/, lib/          resto de la aplicación Next.js
 ```
 
 Los JSON que consume el navegador van codificados con diccionarios (el objeto del contrato
@@ -181,9 +217,24 @@ crudo, ~1,9 MB comprimidos. Se cargan una sola vez — medido en el navegador, 7
 descarga y parseo más 72 ms para construir el índice de búsqueda — y así el filtrado sobre
 los 37.955 contratos es instantáneo sin backend.
 
-## Fuentes
+## Fuentes y marco legal
 
 - Contratos: [dataset `jbjy-vk9h`](https://www.datos.gov.co/d/jbjy-vk9h) (SECOP II) y
-  [dataset `f789-7hwg`](https://www.datos.gov.co/d/f789-7hwg) (SECOP I), en datos.gov.co
-- Contorno de la isla y ubicación de barrios: © OpenStreetMap contributors (ODbL)
+  [dataset `f789-7hwg`](https://www.datos.gov.co/d/f789-7hwg) (SECOP I), en datos.gov.co.
+  El SECOP lo administra Colombia Compra Eficiente.
+- Contornos de las islas y ubicación de barrios: © colaboradores de OpenStreetMap (ODbL)
 - Imagen satelital del editor: © Esri, Maxar, Earthstar Geographics
+
+La reutilización de estos datos está amparada por la **Ley 1712 de 2014** (Transparencia y
+Acceso a la Información Pública Nacional), que define los datos abiertos como información
+pública reutilizable de forma libre y sin restricciones, y por los
+[términos de uso de datos.gov.co](https://herramientas.datos.gov.co/terminos), que autorizan
+expresamente redistribuir, compilar, extraer, copiar, difundir, modificar y adaptar lo
+publicado en el portal. Complementan el marco el Decreto 1081 de 2015 y la Resolución 3564
+de 2015 del MinTIC.
+
+Este es un sitio **independiente**, sin vínculo ni respaldo de la Gobernación del
+Archipiélago, de Colombia Compra Eficiente ni de ninguna entidad pública. Presenta los datos
+tal como los publica el Estado; para efectos oficiales hay que consultar el SECOP.
+El nombre del responsable que aparece en el aviso de derechos se configura en
+[`lib/legal.ts`](lib/legal.ts).
