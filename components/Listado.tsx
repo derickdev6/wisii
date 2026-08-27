@@ -17,8 +17,9 @@ const ORDENES: [Orden, string][] = [
 const TAMANOS = [10, 20, 50, 100];
 const POR_PAGINA_INICIAL = 20;
 
-/** Alto fijo de la caja de resultados; las filas conservan su alto natural. */
-const ALTO_CAJA = 800;
+/** Tope de alto de la caja de resultados: con pocas filas se encoge hasta su
+ *  contenido, y solo aparece scroll interno cuando lo supera. */
+const ALTO_MAX_CAJA = 800;
 
 function Fila({ c, onAbrir }: { c: Contrato; onAbrir: () => void }) {
   return (
@@ -98,9 +99,9 @@ export default function Listado({
         </div>
       </div>
 
-      {/* caja de alto fijo con scroll propio */}
+      {/* la caja se ajusta al contenido hasta el tope, y ahí scrollea */}
       <div ref={caja} className="overflow-y-auto overscroll-contain rounded-xl border"
-           style={{ height: ALTO_CAJA, borderColor: "var(--line)",
+           style={{ maxHeight: ALTO_MAX_CAJA, borderColor: "var(--line)",
                     background: "var(--surface)" }}>
         {visibles.length === 0 ? (
           <div className="p-10 text-center text-sm" style={{ color: "var(--muted)" }}>
