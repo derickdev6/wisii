@@ -287,6 +287,9 @@ export default async function Portada() {
                 u omisiones de la fuente; donde los detectamos, quedan advertidos en la
                 interfaz. Esta publicación es informativa y no constituye prueba, certificación
                 ni asesoría legal: para efectos oficiales consulte directamente el SECOP.
+                Las visitas se miden con Vercel Web Analytics, <strong>sin cookies</strong>:
+                no recoge datos personales, no construye perfiles ni rastrea entre sitios;
+                solo cuenta páginas vistas de forma agregada.
                 {CONTACTO && (
                   <> Para reportar un error escriba a{" "}
                     <a href={`mailto:${CONTACTO}`} className="underline underline-offset-2">{CONTACTO}</a>.

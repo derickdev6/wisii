@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import "maplibre-gl/dist/maplibre-gl.css";
 
@@ -28,7 +29,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script dangerouslySetInnerHTML={{ __html: TEMA_INICIAL }} />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* Analítica de Vercel: sin cookies y sin datos personales. Solo
+            reporta desde el despliegue; en local no envía nada. */}
+        <Analytics />
+      </body>
     </html>
   );
 }

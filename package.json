@@ -13,17 +13,18 @@
     "check": "NEXT_DIST_DIR=.next-check next build"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
+    "maplibre-gl": "^5.6.1",
     "next": "^15.5.4",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "maplibre-gl": "^5.6.1"
+    "react-dom": "^19.1.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.13",
-    "tailwindcss": "^4.1.13",
-    "typescript": "^5.9.2",
     "@types/node": "^22.15.0",
     "@types/react": "^19.1.10",
-    "@types/react-dom": "^19.1.7"
+    "@types/react-dom": "^19.1.7",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.2"
   }
 }
