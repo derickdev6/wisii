@@ -88,7 +88,7 @@ export default function BarraFiltros({
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-8">
+      <div className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-7">
         <label className="flex min-w-0 flex-col gap-1">
           <span className="text-[10px] uppercase tracking-wider" style={{ color: "var(--muted)" }}>
             Gobierno
@@ -106,8 +106,6 @@ export default function BarraFiltros({
           </select>
         </label>
 
-        <Selector etiqueta="Fuente" valor={filtros.fuente} onChange={(v) => set("fuente", v)}
-                  opciones={opciones.fuente} resaltado />
         <Selector etiqueta="Estado" valor={filtros.estado} onChange={(v) => set("estado", v)}
                   opciones={opciones.estado} resaltado />
         <Selector etiqueta="Tipo" valor={filtros.tipo} onChange={(v) => set("tipo", v)}

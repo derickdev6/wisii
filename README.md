@@ -12,7 +12,8 @@ mes y lleva al explorador; y el **explorador** (`/contratos`) con tres vistas: l
 búsqueda integral (la que abre por defecto), mapa de calor (`?v=mapa`) y un editor para
 corregir la ubicación de los barrios.
 
-La barra de filtros es la misma en el listado y en el mapa, y las dos vistas miran el mismo
+Los filtros son gobierno, estado, tipo, modalidad, barrio, rango de fechas y valor mínimo.
+La barra es la misma en el listado y en el mapa, y las dos vistas miran el mismo
 subconjunto: el mapa se agrega en el navegador a partir de los contratos filtrados, no del
 agregado del build. Solo el listado lleva buscador de texto — en el mapa una búsqueda
 escrita acotaría el resultado sin que se vea por qué.
@@ -136,6 +137,8 @@ quien abre el enlace recibe los mismos filtros, el mismo orden y la misma vista.
 - **Compartir búsqueda** (barra de resultados) copia el enlace con todos los filtros
   activos. Los valores por defecto no se escriben, así una búsqueda sin filtros deja la
   URL limpia.
+- Un parámetro que ya no existe (por ejemplo `fuente=`, retirado como filtro) se ignora
+  sin romper el resto del enlace.
 - **Compartir** (ficha de un contrato) copia un enlace que reabre ese contrato. Un enlace
   con `c=` y sin `v=` abre directamente el listado, no el mapa.
 - Si el `c=` no existe en los datos publicados —por ejemplo si el SECOP retiró el
@@ -146,6 +149,13 @@ quien abre el enlace recibe los mismos filtros, el mismo orden y la misma vista.
   seleccionado para copiarlo a mano.
 
 La codificación vive en [`lib/urlEstado.ts`](lib/urlEstado.ts).
+
+## El listado
+
+Filas de alto fijo (84 px) dentro de una caja con scroll propio de 840 px, de modo que
+siempre se ven **10 contratos a la vez** sin depender del largo del objeto. La paginación
+va en pasos de 10, 20, 50 y 100, con 20 por defecto; al cambiar de página o de filtro el
+scroll interno vuelve al tope.
 
 ## Filtros facetados
 
