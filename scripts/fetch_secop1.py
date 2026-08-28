@@ -1,9 +1,10 @@
 """Descarga los contratos de la Gobernación en SECOP I (dataset f789-7hwg).
 
-SECOP I es el sistema anterior a SECOP II. Para esta entidad cubre 2015-2022.
+SECOP I es el sistema anterior a SECOP II. Cubre 2015-2022 y aquí se trae todo
+el departamento, no solo la Gobernación.
 Dos diferencias que importan:
-  - `nit_de_la_entidad` viene como "No Definido", así que la entidad solo se
-    puede identificar por nombre exacto.
+  - `nit_de_la_entidad` a veces viene como "No Definido", así que la entidad no
+    siempre se puede identificar por NIT.
   - No existe ningún campo con la dirección del contratista (lo más fino es
     departamento + municipio), así que estos contratos nunca se pueden ubicar
     en el mapa de calor.
@@ -11,7 +12,7 @@ Dos diferencias que importan:
 import csv, json, os, sys, urllib.parse, urllib.request
 
 DATASET = "f789-7hwg"
-ENTIDAD = "SAN ANDRÉS; PROVIDENCIA Y SANTA CATALINA - GOBERNACIÓN"
+DEPARTAMENTO = "San Andrés, Providencia y Santa Catalina"
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "secop1_raw.csv")
 
 # Solo las columnas que se mapean al modelo de la web: acota la consulta,
@@ -25,13 +26,14 @@ COLS = [
     "plazo_de_ejec_del_contrato", "rango_de_ejec_del_contrato",
     "destino_gasto", "numero_de_constancia", "numero_de_contrato",
     "anno_firma_contrato", "dpto_y_muni_contratista",
+    "nombre_entidad", "nit_de_la_entidad",
 ]
 
 def main():
     token = os.environ.get("SODA_APP_TOKEN", "")
     params = {
         "$select": ",".join(COLS),
-        "$where": f"nombre_entidad='{ENTIDAD}'",
+        "$where": f"departamento_entidad='{DEPARTAMENTO}'",
         "$order": "fecha_de_firma_del_contrato ASC, uid ASC",
         "$limit": 50000,
     }

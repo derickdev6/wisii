@@ -104,6 +104,7 @@ export default function DetalleContrato({ c, url: urlCompartir, onCerrar }: {
             <Campo k="Firma" v={fecha(c.firma)} />
             <Campo k="Finaliza" v={fecha(c.fin)} />
             <Campo k="Duración" v={c.duracion} />
+            <Campo k="Entidad contratante" v={c.entidad} />
             <Campo k="Tipo" v={c.tipo} />
             <Campo k="Modalidad" v={c.modalidad} />
             <Campo k="Origen de recursos" v={c.origen} />

@@ -2,9 +2,11 @@
 
 > *WiSii* — «we see» en creole isleño: **nosotros vemos**.
 
-Veeduría ciudadana de la contratación de la **Gobernación del Departamento Archipiélago
-de San Andrés, Providencia y Santa Catalina** (NIT 892400038), a partir de los datos
-abiertos de `datos.gov.co`. Cubre **37.955 contratos entre marzo de 2015 y agosto de 2026**,
+Veeduría ciudadana de la contratación pública del **Archipiélago de San Andrés,
+Providencia y Santa Catalina**, a partir de los datos abiertos de `datos.gov.co`.
+Cubre las **30 entidades públicas** del departamento, no solo la Gobernación: alcaldía,
+corporación ambiental, empresas de servicios, instituciones educativas, contralorías y
+entidades nacionales con sede en las islas. Cubre **69.190 contratos entre marzo de 2015 y agosto de 2026**,
 uniendo los dos sistemas de contratación pública del país.
 
 Dos rutas: una **portada** (`/`) que explica el proyecto, muestra lo firmado en el último
@@ -35,10 +37,18 @@ vacía si el SECOP se retrasa.
 |---|---|---|
 | Dataset | `jbjy-vk9h` | `f789-7hwg` |
 | Período | jun 2020 – ago 2026 | mar 2015 – sep 2022 |
-| Contratos | 31.975 | 5.980 |
+| Contratos | 39.072 | 30.118 |
 | Identificación de la entidad | por NIT | solo por nombre (el NIT figura como "No Definido") |
 | Domicilio del contratista | sí | **no existe el campo** |
 | Ejecución de pagos | sí (casi nunca diligenciada) | no se publica |
+
+**Los nombres de entidad se unifican con un mapa curado**, en
+[`data/entidades.json`](data/entidades.json). Cada sistema escribe la misma entidad de
+forma distinta —la Gobernación es «GOBERNACIÓN DEL DEPARTAMENTO ARCHIPIELAGO…» en SECOP II
+y «GOBERNACIÓN» en SECOP I— y sin unificar aparecería dos veces en el filtro. El NIT no
+sirve como clave: el 800103021 lo comparten la Alcaldía y la Personería de Providencia, y
+la Gobernación figura sin NIT en SECOP I. Por eso el mapeo es explícito y auditable, no
+automático. Lo que no esté en el mapa se muestra tal como lo publica el Estado.
 
 Los dos sistemas no comparten identificador de contrato. En el solape de 2020 se
 descartaron **115 registros** que aparecían en ambos con el mismo contratista, fecha de

@@ -89,7 +89,7 @@ export default function BarraFiltros({
       )}
 
       {/* Una sola línea en pantallas anchas: 7 controles y el botón de limpiar. */}
-      <div className="grid grid-cols-2 items-end gap-2 md:grid-cols-4 lg:grid-cols-8">
+      <div className="grid grid-cols-2 items-end gap-2 md:grid-cols-4 lg:grid-cols-9">
         <label className="flex min-w-0 flex-col gap-1">
           <span className="text-[10px] uppercase tracking-wider" style={{ color: "var(--muted)" }}>
             Gobierno
@@ -107,6 +107,8 @@ export default function BarraFiltros({
           </select>
         </label>
 
+        <Selector etiqueta="Entidad" valor={filtros.entidad} onChange={(v) => set("entidad", v)}
+                  opciones={opciones.entidad} resaltado />
         <Selector etiqueta="Estado" valor={filtros.estado} onChange={(v) => set("estado", v)}
                   opciones={opciones.estado} resaltado />
         <Selector etiqueta="Tipo" valor={filtros.tipo} onChange={(v) => set("tipo", v)}

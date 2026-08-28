@@ -73,10 +73,11 @@ export default async function Portada() {
            style={{ color: "var(--ink-soft)" }}>
           La contratación de las regiones se publica, pero queda enterrada en portales
           pensados para trámites, no para leerse. Este observatorio reúne{" "}
-          <strong>{numero(meta.contratos)} contratos</strong> de la Gobernación de San Andrés,
-          Providencia y Santa Catalina — {anios} años de historia — y los vuelve consultables:
-          se pueden buscar por objeto, proveedor o barrio, filtrar por período de gobierno y
-          ver dónde vive quien contrata con el departamento.
+          <strong>{numero(meta.contratos)} contratos</strong> de las {meta.entidades}{" "}
+          entidades públicas del Archipiélago de San Andrés, Providencia y Santa Catalina
+          — {anios} años de historia — y los vuelve consultables: se pueden buscar por
+          objeto, proveedor o barrio, filtrar por entidad y período de gobierno, y ver
+          dónde vive quien contrata con el Estado en las islas.
         </p>
 
         <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -98,8 +99,8 @@ export default async function Portada() {
                 nota={`${fecha(meta.desde)} – ${fecha(meta.hasta)}`} />
           <Dato valor={copCorto(meta.valor_total)} etiqueta="Valor contratado"
                 nota="suma de los valores publicados" />
-          <Dato valor={numero(meta.proveedores)} etiqueta="Proveedores"
-                nota="documentos distintos" />
+          <Dato valor={String(meta.entidades)} etiqueta="Entidades"
+                nota={`${numero(meta.proveedores)} proveedores distintos`} />
           <Dato valor={`${(meta.geo.cobertura * 100).toFixed(1)}%`} etiqueta="Ubicados en el mapa"
                 nota={`${meta.geo.barrios_ubicados} barrios de las dos islas`} />
         </div>
@@ -114,7 +115,8 @@ export default async function Portada() {
                 Lo firmado en el último mes
               </h2>
               <p className="mt-2 text-sm" style={{ color: "var(--ink-soft)" }}>
-                Entre el {fecha(rec.desde)} y el {fecha(rec.hasta)}, la Gobernación firmó{" "}
+                Entre el {fecha(rec.desde)} y el {fecha(rec.hasta)}, las entidades del
+                departamento firmaron{" "}
                 <strong>{numero(rec.n)} contratos</strong> con {numero(rec.proveedores)}{" "}
                 proveedores distintos.
               </p>
@@ -211,8 +213,8 @@ export default async function Portada() {
             },
             {
               t: "El mapa no es dónde se ejecuta",
-              d: `El SECOP no publica coordenadas y registra todos los contratos en la sede de la ` +
-                 `Gobernación. El mapa usa el domicilio del representante legal del contratista, ` +
+              d: `El SECOP no publica coordenadas y registra cada contrato en la sede de su ` +
+                 `entidad. El mapa usa el domicilio del representante legal del contratista, ` +
                  `único campo con variación geográfica, y ubica el ${(meta.geo.cobertura * 100).toFixed(1)}% ` +
                  `de los que lo traen.`,
             },

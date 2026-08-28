@@ -36,6 +36,7 @@ function Fila({ c, onAbrir }: { c: Contrato; onAbrir: () => void }) {
         {c.objeto}
       </p>
       <div className="flex flex-wrap items-center gap-1.5">
+        <Chip>{c.entidad}</Chip>
         <Chip tono={c.estado === "En ejecución" ? "ok" : "neutro"}>{c.estado}</Chip>
         {c.duracion && <Chip>{c.duracion}</Chip>}
         <Chip>{c.destino}</Chip>

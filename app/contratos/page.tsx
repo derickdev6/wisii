@@ -125,11 +125,12 @@ function Explorador() {
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
-              Contratación de la Gobernación de San Andrés
+              Contratación pública del Archipiélago
             </h1>
             <p className="mt-1 text-xs" style={{ color: "var(--muted)" }}>
-              {numero(meta.contratos)} contratos firmados entre {fecha(meta.desde)} y{" "}
-              {fecha(meta.hasta)} · {meta.fuente}
+              {numero(meta.contratos)} contratos de {meta.entidades} entidades del
+              departamento, firmados entre {fecha(meta.desde)} y {fecha(meta.hasta)} ·{" "}
+              {meta.fuente}
             </p>
           </div>
         </div>
@@ -187,7 +188,8 @@ function Explorador() {
         (2020-2026) y{" "}
         <a href="https://www.datos.gov.co/d/f789-7hwg" target="_blank"
            rel="noopener noreferrer" className="underline">SECOP I</a>{" "}
-        (2015-2022). Contorno de las islas © OpenStreetMap. El mapa ubica el{" "}
+        (2015-2022), para las {meta.entidades} entidades públicas del departamento.
+        Contorno de las islas © OpenStreetMap. El mapa ubica el{" "}
         <strong>domicilio del representante legal del contratista</strong>, no el lugar de
         ejecución: el SECOP registra todos los contratos en la misma dirección, y SECOP I
         ni siquiera publica ese campo. Se descartaron {meta.duplicados_descartados} registros

@@ -1,4 +1,4 @@
-"""Descarga los contratos de la Gobernación de San Andrés desde datos.gov.co (SODA API).
+"""Descarga los contratos del departamento Archipiélago desde datos.gov.co (SODA API).
 
 Uso:  python3 scripts/fetch_data.py
 Env:  SODA_APP_TOKEN (opcional pero recomendado; sin él aplica rate limit estricto)
@@ -6,7 +6,11 @@ Env:  SODA_APP_TOKEN (opcional pero recomendado; sin él aplica rate limit estri
 import csv, io, os, sys, urllib.parse, urllib.request
 
 DATASET = "jbjy-vk9h"                 # SECOP II - Contratos Electrónicos
-NIT     = "892400038"                 # GOBERNACIÓN ... SAN ANDRES PROVIDENCIA Y SANTA CATALINA
+# Todo el departamento, no solo la Gobernación: 15 entidades públicas con
+# contratación propia. Se filtra por departamento y no por NIT porque hay
+# municipios homónimos en otros departamentos (San Andrés de Cuerquia en
+# Antioquia, San Andrés en Santander) que un filtro por nombre arrastraría.
+DEPARTAMENTO = "San Andrés, Providencia y Santa Catalina"
 CAMPO_FECHA = "fecha_de_firma"
 PAGE    = 2000
 
@@ -15,7 +19,7 @@ PAGE    = 2000
 # (Borrador, Cancelado, enviado Proveedor, En aprobación) y traen valores
 # corruptos — hay borradores por encima de $1.000 billones COP, mil veces
 # el PIB del país. Filtrarlos por fecha elimina los dos problemas a la vez.
-FILTRO = f"nit_entidad='{NIT}' AND {CAMPO_FECHA} IS NOT NULL"
+FILTRO = f"departamento='{DEPARTAMENTO}' AND {CAMPO_FECHA} IS NOT NULL"
 OUT     = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data",
                        "contratos_raw.csv")
 

@@ -90,6 +90,26 @@ def prefijo_comun(vals):
 
 
 d10 = lambda v: (v or "")[:10]
+
+# SECOP I antepone el departamento al nombre: "SAN ANDRÉS; PROVIDENCIA Y SANTA
+# CATALINA - GOBERNACIÓN". Se recorta para que la misma entidad no aparezca con
+# dos nombres distintos según el sistema del que venga.
+PREFIJO_DPTO = re.compile(r"^SAN ANDR[ÉE]S[;,]?\s*(PROVIDENCIA)?\s*(Y\s*SANTA CATALINA)?\s*-\s*",
+                          re.IGNORECASE)
+
+# Mapa curado de nombres: ver data/entidades.json
+_CANON = {}
+
+def cargar_entidades(data_dir):
+    global _CANON
+    p = os.path.join(data_dir, "entidades.json")
+    if os.path.exists(p):
+        _CANON = json.load(open(p, encoding="utf-8"))["canonico"]
+
+def limpiar_entidad(nombre):
+    n = PREFIJO_DPTO.sub("", (nombre or "").strip()).strip(" -")
+    n = re.sub(r"\s+", " ", n) or "Sin identificar"
+    return _CANON.get(n, n)
 NOTICE = re.compile(r"noticeUID=([A-Za-z0-9._-]+)")
 
 
@@ -100,6 +120,8 @@ def leer_secop2(path):
         m = NOTICE.search(r.get("urlproceso") or "")
         out.append({
             "fuente": SECOP2,
+            "entidad": limpiar_entidad(r["nombre_entidad"]),
+            "nit": r.get("nit_entidad", ""),
             "id": r["id_contrato"],
             "estado": r["estado_contrato"],
             "tipo": r["tipo_de_contrato"],
@@ -134,6 +156,8 @@ def leer_secop1(path):
         rango = RANGOS.get((r.get("rango_de_ejec_del_contrato") or "").strip().upper(), "")
         out.append({
             "fuente": SECOP1,
+            "entidad": limpiar_entidad(r.get("nombre_entidad")),
+            "nit": (r.get("nit_de_la_entidad") or "").split("-")[0].strip(),
             "id": r["uid"],
             "estado": r.get("estado_del_proceso") or "No definido",
             "tipo": r.get("tipo_de_contrato") or "No definido",
@@ -160,6 +184,7 @@ def main():
     src2 = os.path.join(DATA, "contratos_raw.csv")
     if not os.path.exists(src2):
         sys.exit("error: falta data/contratos_raw.csv — corré antes scripts/fetch_data.py")
+    cargar_entidades(DATA)
     rows = leer_secop2(src2)
     n2 = len(rows)
 
@@ -170,9 +195,9 @@ def main():
         # Los dos sistemas no comparten identificador. En el solape de 2020 un mismo
         # contrato podría figurar en ambos, así que se descarta por huella
         # (documento del contratista + fecha de firma + valor).
-        huella = {(r["documento"], r["firma"], r["valor"]) for r in rows}
+        huella = {(r["nit"], r["documento"], r["firma"], r["valor"]) for r in rows}
         for r in viejos:
-            k = (r["documento"], r["firma"], r["valor"])
+            k = (r["nit"], r["documento"], r["firma"], r["valor"])
             if k in huella:
                 dup += 1
             else:
@@ -202,6 +227,7 @@ def main():
 
     # --- diccionarios ---
     fuentes,  i_fuente  = dictify(r["fuente"] for r in rows)
+    entidades, i_entidad = dictify(r["entidad"] for r in rows)
     estados,  i_estado  = dictify(r["estado"] for r in rows)
     tipos,    i_tipo    = dictify(r["tipo"] for r in rows)
     modals,   i_modal   = dictify(r["modalidad"] for r in rows)
@@ -211,6 +237,8 @@ def main():
     objetos,  i_objeto  = dictify(r["objeto"] for r in rows)
     domis,    i_domi    = dictify(r["domicilio"] for r in rows)
     duras,    i_dura    = dictify(r["duracion"] for r in rows)
+    firmas_d, i_firma   = dictify(r["firma"] for r in rows)
+    fines_d,  i_fin     = dictify(r["fin"] for r in rows)
     b_names = sorted(barrios_geo)
     i_barrio = {b: i for i, b in enumerate(b_names)}
 
@@ -220,15 +248,21 @@ def main():
     pref_por_fuente = {
         f: prefijo_comun([r["id"] for r in rows if r["fuente"] == f]) for f in fuentes
     }
+    # el enlace de SECOP II comparte el prefijo "CO1.NTC." en decenas de miles de filas
+    pref_enlace = {
+        f: prefijo_comun([r["enlace"] for r in rows if r["fuente"] == f and r["enlace"]])
+        for f in fuentes
+    }
     corta = lambda v, p: v[len(p):] if p and v.startswith(p) else v
 
     contratos = [[
         corta(r["id"], pref_por_fuente[r["fuente"]]),
         i_fuente[r["fuente"]],
+        i_entidad[r["entidad"]],
         i_estado[r["estado"]],
         i_tipo[r["tipo"]],
         i_modal[r["modalidad"]],
-        r["firma"], r["fin"],
+        i_firma[r["firma"]], i_fin[r["fin"]],
         i_prov[r["proveedor"]],
         r["documento"],
         r["valor"], r["pagado"],
@@ -238,19 +272,22 @@ def main():
         i_domi[r["domicilio"]],
         i_origen[r["origen"]],
         i_destino[r["destino"]],
-        r["enlace"],
+        corta(r["enlace"], pref_enlace[r["fuente"]]),
     ] for r, b in zip(rows, asignado)]
 
-    CAMPOS = ["id","fuente","estado","tipo","modalidad","firma","fin","proveedor","documento",
-              "valor","pagado","objeto","duracion","barrio","domicilio","origen","destino","enlace"]
+    CAMPOS = ["id","fuente","entidad","estado","tipo","modalidad","firma","fin","proveedor",
+              "documento","valor","pagado","objeto","duracion","barrio","domicilio","origen",
+              "destino","enlace"]
 
     os.makedirs(OUTDIR, exist_ok=True)
     json.dump({"campos": CAMPOS,
                "pref": pref_por_fuente,
-               "dic": {"fuente": fuentes, "estado": estados, "tipo": tipos,
+               "prefEnlace": pref_enlace,
+               "dic": {"fuente": fuentes, "entidad": entidades, "estado": estados, "tipo": tipos,
                        "modalidad": modals, "proveedor": provs, "origen": origenes,
                        "destino": destinos, "barrio": b_names, "objeto": objetos,
-                       "duracion": duras, "domicilio": domis},
+                       "duracion": duras, "domicilio": domis,
+                       "firma": firmas_d, "fin": fines_d},
                "filas": contratos},
               open(os.path.join(OUTDIR, "contratos.json"), "w"),
               ensure_ascii=False, separators=(",", ":"))
@@ -307,12 +344,12 @@ def main():
     aprox = sum(1 for b in agg if barrios_geo[b]["src"] == "aprox")
     meta = {
         "actualizado": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "entidad": "GOBERNACIÓN DEL DEPARTAMENTO ARCHIPIELAGO DE SAN ANDRES "
-                   "PROVIDENCIA Y SANTA CATALINA",
-        "nit": "892400038",
+        "departamento": "Archipiélago de San Andrés, Providencia y Santa Catalina",
         "fuente": "datos.gov.co · SECOP II (jbjy-vk9h) y SECOP I (f789-7hwg)",
         "contratos": len(rows),
         "por_fuente": {SECOP2: n2, SECOP1: n1},
+        "entidades": len({r["entidad"] for r in rows}),
+        "por_entidad": {e: n for e, n in Counter(r["entidad"] for r in rows).most_common()},
         "duplicados_descartados": dup,
         "valor_total": valor_total,
         "valor_mediano": valores[len(valores) // 2],

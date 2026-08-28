@@ -1,0 +1,35 @@
+{
+  "_nota": "Unificación de nombres de entidad. SECOP I y SECOP II escriben la misma entidad de forma distinta, lo que la partiría en dos en los filtros. El NIT no sirve como clave única: el 800103021 lo comparten la Alcaldía y la Personería de Providencia, y la Gobernación figura sin NIT en SECOP I. Por eso el mapeo es explícito. La clave es el nombre publicado, ya sin el prefijo de departamento que antepone SECOP I; el valor es el nombre canónico que ve el usuario. Lo que no esté aquí se muestra tal como lo publica el Estado.",
+  "canonico": {
+    "GOBERNACIÓN DEL DEPARTAMENTO ARCHIPIELAGO DE SAN ANDRES PROVIDENCIA Y SANTA CATALINA": "Gobernación del Archipiélago",
+    "GOBERNACIÓN": "Gobernación del Archipiélago",
+
+    "ALCALDÍA MUNICIPIO DE PROVIDENCIA Y SANTA CATALINA": "Alcaldía de Providencia y Santa Catalina",
+    "ALCALDIA MUNICIPAL PROVIDENCIA Y SANTA CATALINA ISLAS": "Alcaldía de Providencia y Santa Catalina",
+
+    "CORPORACION PARA EL DESARROLLO SOSTENIBLE DEL ARCHIPIELAGO DE SAN ANDRES PROVIDENCIA Y SANTA CATALINA - CORALINA": "CORALINA",
+    "CORALINA - CORPORACIÓN PARA EL DESARROLLO SOSTENIBLE DEL ARCHIPIÉLAGO DE SAN ANDRÉS; PROVIDENCIA Y SANTA CATALINA": "CORALINA",
+
+    "CAMARA DE COMERCIO DE SAN ANDRES, PROVIDENCIA Y SANTA CATALINA": "Cámara de Comercio de San Andrés",
+    "CÁMARA DE COMERCIO DE SAN ANDRÉS; PROVIDENCIA Y SANTA CATALINA ISLAS": "Cámara de Comercio de San Andrés",
+
+    "CONTRALORIA DEPARTAMENTAL DE SANANDRES": "Contraloría Departamental",
+    "CONTRALORÍA GENERAL": "Contraloría Departamental",
+
+    "SERVICIO NACIONAL DE APRENDIZAJE SENA REGIONAL SAN ANDRES": "SENA Regional San Andrés",
+    "ICBF REGIONAL SAN ANDRES": "ICBF Regional San Andrés",
+    "ARMADA NACIONAL - BASE NAVAL ARC SAN ANDRES": "Armada Nacional · Base Naval ARC San Andrés",
+    "DEPARTAMENTO DE POLICIA SAN ANDRES, PROVIDENCIA Y SANTA CATALINA": "Policía · Departamento San Andrés",
+    "DISAN AREA DE SANIDAD SAN ANDRES": "Policía · Área de Sanidad",
+    "EPMSC SAN ANDRES INPEC": "INPEC · EPMSC San Andrés",
+    "CONTRALORIA GENERAL DE LA REPUBLICA-CGR-GERENCIA DEPARTAMENTAL SAN ANDRES": "Contraloría General de la República",
+    "INSTITUTO COLOMBIANO AGROPECUARIO (ICA) - SECCIONAL SAN ANDRES": "ICA Seccional San Andrés",
+    "EMPRESA SOCIAL DEL ESTADO (ESE) HOSPITAL DEPARTAMENTAL DE SAN ANDRÉS, PROVIDENCIA Y SANTA CATALINA": "ESE Hospital Departamental",
+    "EMPRESA DE ENERGÍA DEL ARCHIPIÉLAGO DE SAN ANDRÉS; PROVIDENCIA Y SANTA CATALINA S.A E.S.P": "Empresa de Energía del Archipiélago",
+    "PROVIDENCE AND KETTLINA UTILITIES COMPANY SAS ESP": "Providence and Kettlina Utilities",
+    "AGUAS DE SAN ANDRES S.A E.S.P": "Aguas de San Andrés",
+    "INSTITUTO NACIONAL DE FORMACIÓN TÉCNICA PROFESIONAL DEL DEPARTAMENTO ARCHIPIÉLAGO DE SAN ANDRÉS; PROVIDENCIA Y SANTA CATALINA": "INFOTEP",
+    "CONCEJO MUNICIPIO DE PROVIDENCIA": "Concejo de Providencia",
+    "PERSONERÍA MUNICIPIO DE PROVIDENCIA ISLA": "Personería de Providencia"
+  }
+}

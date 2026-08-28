@@ -3,10 +3,13 @@ export interface ContratosRaw {
   campos: string[];
   /** prefijo constante de id recortado de cada fila, por fuente */
   pref: Record<string, string>;
+  /** prefijo constante del enlace al SECOP, por fuente */
+  prefEnlace: Record<string, string>;
   dic: {
-    fuente: string[]; estado: string[]; tipo: string[]; modalidad: string[];
-    proveedor: string[]; origen: string[]; destino: string[]; barrio: string[];
-    objeto: string[]; duracion: string[]; domicilio: string[];
+    fuente: string[]; entidad: string[]; estado: string[]; tipo: string[];
+    modalidad: string[]; proveedor: string[]; origen: string[]; destino: string[];
+    barrio: string[]; objeto: string[]; duracion: string[]; domicilio: string[];
+    firma: string[]; fin: string[];
   };
   filas: (string | number)[][];
 }
@@ -19,6 +22,8 @@ export interface Contrato {
   id: string;
   /** SECOP I no publica domicilio del contratista: nunca tiene barrio */
   fuente: Fuente;
+  /** entidad contratante, con el nombre ya unificado entre los dos sistemas */
+  entidad: string;
   estado: string;
   tipo: string;
   modalidad: string;
@@ -41,10 +46,12 @@ export interface Contrato {
 
 export interface Meta {
   actualizado: string;
-  entidad: string;
-  nit: string;
   fuente: string;
   contratos: number;
+  /** nombre del departamento; el sitio ya no cubre una sola entidad */
+  departamento: string;
+  entidades: number;
+  por_entidad: Record<string, number>;
   por_fuente: Record<string, number>;
   duplicados_descartados: number;
   valor_total: number;

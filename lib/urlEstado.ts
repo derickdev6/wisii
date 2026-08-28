@@ -13,6 +13,7 @@ export type Vista = "mapa" | "contratos" | "editor" | "asignador";
 export interface Filtros {
   q: string;
   gobierno: string;
+  entidad: string;
   estado: string;
   tipo: string;
   modalidad: string;
@@ -23,13 +24,13 @@ export interface Filtros {
 }
 
 export const FILTROS_VACIOS: Filtros = {
-  q: "", gobierno: "", estado: "", tipo: "", modalidad: "",
+  q: "", gobierno: "", entidad: "", estado: "", tipo: "", modalidad: "",
   desde: "", hasta: "", minValor: "", orden: "firma-desc",
 };
 
 /** nombre del campo -> parámetro en la URL */
 const CLAVES: Record<keyof Filtros, string> = {
-  q: "q", gobierno: "gob", estado: "estado", tipo: "tipo",
+  q: "q", gobierno: "gob", entidad: "entidad", estado: "estado", tipo: "tipo",
   modalidad: "modalidad", desde: "desde", hasta: "hasta",
   minValor: "min", orden: "orden",
 };
