@@ -456,6 +456,30 @@
    "lon": -81.69871,
    "src": "manual",
    "isla": "San Andrés"
+  },
+  "Barrio Hill Well": {
+   "lat": 12.58033,
+   "lon": -81.70957,
+   "src": "manual",
+   "isla": "San Andrés"
+  },
+  "Sector Black Dog": {
+   "lat": null,
+   "lon": null,
+   "src": "sin-ubicar",
+   "isla": "San Andrés"
+  },
+  "Black Dog": {
+   "lat": 12.57912,
+   "lon": -81.70124,
+   "src": "manual",
+   "isla": "San Andrés"
+  },
+  "Barrio Angula": {
+   "lat": 12.58498,
+   "lon": -81.7139,
+   "src": "manual",
+   "isla": "San Andrés"
   }
  },
  "alias": {
@@ -649,6 +673,22 @@
   "BARRIO ROC HOLLE": "Rock Hole",
   "BARRIO RACK HOLE 21 63": "Rock Hole",
   "BARRIO RACK HOLE": "Rock Hole",
-  "BRR ATLANTICO": "Barrio Atlantico"
+  "BRR ATLANTICO": "Barrio Atlantico",
+  "AVENDIA 20 DE JULIO DIAGONAL COLANTA": "Av 20 De Julio",
+  "BARRIO SWAND GROUND CR9 35": "Swamp Ground",
+  "BARRIO EL BOGHT MANZANA 1 CASA 7": "El Bight",
+  "BARRIO BIGTH M 4 C 1": "El Bight",
+  "SWANP GROUND": "Swamp Ground",
+  "BOXON": "Boxton",
+  "BIGTH MANZA 13 CASA 4": "El Bight",
+  "BAHIA SUR OESTE": "South West Bay",
+  "AGUA MANSA": "Aguas Mansas",
+  "EL BIGTH": "El Bight",
+  "AVE LAS AMERCIAS ALM JACOBO 2DA PISO": "Av Las Americas",
+  "SUR OESTE": "South West Bay",
+  "BARRIO HILL WELL": "Barrio Hill Well",
+  "SECTOR BLACK DOG": "Black Dog",
+  "BLACK DOG": "Black Dog",
+  "BARRIO ANGULA": "Barrio Angula"
  }
 }
