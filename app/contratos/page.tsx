@@ -27,14 +27,20 @@ const MapaCalor = dynamic(() => import("@/components/MapaCalor"), {
 const EditorBarrios = dynamic(() => import("@/components/EditorBarrios"), {
   ssr: false, loading: () => <Cargando texto="Abriendo el editor…" />,
 });
+const AsignadorBarrios = dynamic(() => import("@/components/AsignadorBarrios"), {
+  ssr: false, loading: () => <Cargando texto="Cargando pendientes…" />,
+});
 
-/** El editor solo existe corriendo en local; en Vercel no se ofrece. */
+/** Las herramientas de barrios escriben en disco: solo existen en local. */
 const EDITOR_DISPONIBLE = process.env.NEXT_PUBLIC_EDITOR_BARRIOS !== "0";
+const HERRAMIENTAS: Vista[] = ["editor", "asignador"];
 
 const VISTAS: [Vista, string][] = [
   ["contratos", "Contratos"],
   ["mapa", "Mapa de calor"],
-  ...(EDITOR_DISPONIBLE ? ([["editor", "Editor de barrios"]] as [Vista, string][]) : []),
+  ...(EDITOR_DISPONIBLE
+    ? ([["editor", "Editor de barrios"], ["asignador", "Asignador de barrios"]] as [Vista, string][])
+    : []),
 ];
 
 interface Datos {
@@ -63,8 +69,8 @@ function Explorador() {
   // replace(), para no llenar el historial con cada tecla del buscador.
   const [vista, setVista] = useState<Vista>(() => {
     const v = leerVista(new URLSearchParams(sp.toString()));
-    // un enlace a ?v=editor en un despliegue cae al listado
-    return v === "editor" && !EDITOR_DISPONIBLE ? "contratos" : v;
+    // un enlace a una herramienta local en un despliegue cae al listado
+    return HERRAMIENTAS.includes(v) && !EDITOR_DISPONIBLE ? "contratos" : v;
   });
   const [filtros, setFiltros] = useState<Filtros>(() => leerFiltros(new URLSearchParams(sp.toString())));
   const [abiertoId, setAbiertoId] = useState<string | null>(
@@ -144,7 +150,7 @@ function Explorador() {
 
       {/* La barra de filtros es la misma en las dos vistas; solo el listado
           lleva buscador de texto. */}
-      {vista !== "editor" && (
+      {!HERRAMIENTAS.includes(vista) && (
         <div className="mt-4">
           <BarraFiltros filtros={filtros} setFiltros={setFiltros}
                         opciones={filtrado.opciones} periodos={filtrado.periodos}
@@ -165,10 +171,11 @@ function Explorador() {
                      meta={meta} onAbrirContrato={(c) => setAbiertoId(c.id)} />
         )}
         {vista === "editor" && EDITOR_DISPONIBLE && <EditorBarrios meta={meta} />}
+        {vista === "asignador" && EDITOR_DISPONIBLE && <AsignadorBarrios />}
       </section>
 
       {/* contexto de lectura, debajo de los resultados */}
-      {periodoSel && vista !== "editor" && (
+      {periodoSel && !HERRAMIENTAS.includes(vista) && (
         <div className="mt-5"><NotaGobierno periodo={periodoSel} /></div>
       )}
 

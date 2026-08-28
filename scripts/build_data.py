@@ -350,6 +350,23 @@ def main():
     json.dump(meta, open(os.path.join(OUTDIR, "meta.json"), "w"),
               ensure_ascii=False, separators=(",", ":"))
 
+    # --- pendientes.json: TODOS los domicilios sin reconocer ---
+    # meta.json lleva solo los 150 más frecuentes para no engordar el payload
+    # que descarga cualquier visitante. El asignador necesita la lista entera,
+    # así que va en su propio archivo, que solo pide la herramienta local.
+    faltantes = Counter(norm(r["domicilio"]) for r, b in zip(rows, asignado)
+                        if b is None and norm(r["domicilio"]) not in VACIO)
+    json.dump({
+        "actualizado": meta["actualizado"],
+        "textos": len(faltantes),
+        "contratos": sum(faltantes.values()),
+        "pendientes": [{"texto": t, "n": n} for t, n in faltantes.most_common()],
+    }, open(os.path.join(OUTDIR, "pendientes.json"), "w"),
+       ensure_ascii=False, separators=(",", ":"))
+    print(f"pendientes     {len(faltantes):>6}   "
+          f"{os.path.getsize(os.path.join(OUTDIR, 'pendientes.json'))/1024:>7.0f} KB"
+          f"   ({sum(faltantes.values())} contratos)")
+
     # --- recientes.json: lo firmado en los últimos 30 días ---
     # La portada lo carga en vez de contratos.json (10 MB). La ventana se mide
     # desde la última firma publicada, no desde hoy, para que nunca salga vacía

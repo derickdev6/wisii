@@ -390,6 +390,72 @@
    "lon": -81.3736,
    "src": "aprox",
    "isla": "Providencia"
+  },
+  "Barrio La Union": {
+   "lat": 12.58494,
+   "lon": -81.70394,
+   "src": "manual",
+   "isla": "San Andrés"
+  },
+  "Av 20 De Julio": {
+   "lat": 12.58132,
+   "lon": -81.69709,
+   "src": "manual",
+   "isla": "San Andrés"
+  },
+  "Barrio Atlantico": {
+   "lat": 12.57757,
+   "lon": -81.70845,
+   "src": "manual",
+   "isla": "San Andrés"
+  },
+  "Barrio Canteras": {
+   "lat": 12.58195,
+   "lon": -81.71154,
+   "src": "manual",
+   "isla": "San Andrés"
+  },
+  "Av Newball": {
+   "lat": 12.58066,
+   "lon": -81.69535,
+   "src": "manual",
+   "isla": "San Andrés"
+  },
+  "Barrio Tablitas": {
+   "lat": 12.5849,
+   "lon": -81.71138,
+   "src": "manual",
+   "isla": "San Andrés"
+  },
+  "Cabanas Altamar": {
+   "lat": null,
+   "lon": null,
+   "src": "sin-ubicar",
+   "isla": "San Andrés"
+  },
+  "Cabanas": {
+   "lat": 12.58887,
+   "lon": -81.70988,
+   "src": "manual",
+   "isla": "San Andrés"
+  },
+  "Barrio Vietnam": {
+   "lat": 12.58123,
+   "lon": -81.69596,
+   "src": "manual",
+   "isla": "San Andrés"
+  },
+  "Av Las Americas": {
+   "lat": 12.58269,
+   "lon": -81.69452,
+   "src": "manual",
+   "isla": "San Andrés"
+  },
+  "Av Las Americas 5 Esquinas": {
+   "lat": 12.58361,
+   "lon": -81.69871,
+   "src": "manual",
+   "isla": "San Andrés"
   }
  },
  "alias": {
@@ -527,6 +593,62 @@
   "DARLYS FORT": "Darlys Fort",
   "SANTA CATALINA": "Santa Catalina",
   "CATALINA": "Santa Catalina",
-  "PROVIDENCIA": "Santa Isabel"
+  "PROVIDENCIA": "Santa Isabel",
+  "BARRIO EL BAIGTH": "El Bight",
+  "BARRIO LA UNION": "Barrio La Union",
+  "AV 20 DE JULIO": "Av 20 De Julio",
+  "BARRIO ATLANTICO": "Barrio Atlantico",
+  "BARRIO CANTERAS": "Barrio Canteras",
+  "AVENIDA 20 DE JULIO": "Av 20 De Julio",
+  "AV NEWBALL": "Av Newball",
+  "AVENIDA XX DE JULIO": "Av 20 De Julio",
+  "SIMPSOM WELL": "Simpson Well",
+  "BARRIO ATLANTICO PARTE ALTA": "Barrio Atlantico",
+  "AV 20 DE JULIO FRENTE A COLANTA": "Av 20 De Julio",
+  "AV FRANCISCO NEWBALL NO 4 138": "Av Newball",
+  "BARRIO TABLITAS": "Barrio Tablitas",
+  "CABANAS ALTAMAR": "Cabanas",
+  "SAN ANDRES ISLAND COLOMBIA": "North End",
+  "CABANAS": "Cabanas",
+  "CABANAS ALTAMAR SEGUNDA ENTRADA": "Cabanas",
+  "SWAM GROUND": "Swamp Ground",
+  "AV XX DE JULIO SAN ANDRES ISLAS": "Av 20 De Julio",
+  "CALLE 1 1 B 58 FRENTE CLUB NAUTICO": "Av Newball",
+  "AVENIDA NEWBALL": "Av Newball",
+  "BARRIO EL BIGTH": "El Bight",
+  "ROCK HOLLE": "Rock Hole",
+  "CABANAS ALTAMAR 2DA ENTRADA": "Cabanas",
+  "AV JUAN XVIII APARTAMENTOS HOWARD 9": "Juan XXIII",
+  "BARRIO CABANAS ALTAMAR DETRAS VIVERO PAVAS": "Cabanas",
+  "ATLANTICO PARTE ALTA": "Barrio Atlantico",
+  "SAREY BAY": "Sarie Bay",
+  "TOMHOOKER DIAGONAL COLEGIO CEMED": "Tom Hooker",
+  "MORRISLANDING": "Morris Landing",
+  "BIGTH M3 C2": "El Bight",
+  "BARRIO UNION EN SAN ANDRES ISLA COLOMBIA": "Barrio La Union",
+  "AVE COLOMBIA NO 1 186 EDIF HANSA BAY CLUB APTO 505": "Punta Hansa",
+  "BARRIO VIETNAM": "Barrio Vietnam",
+  "AV LAS AMERICAS": "Av Las Americas",
+  "SAREI BAY": "Sarie Bay",
+  "AVENIDA LAS AMERICAS": "Av Las Americas",
+  "BARRIO MORRISLANDING": "Morris Landing",
+  "EDIFICIO HANSA REEF LOCAL 3": "Punta Hansa",
+  "AV LAS AMERICSS": "Av Las Americas",
+  "AV DUARTE BLUM UNISANANDRES LC 19": "North End",
+  "AV 20 DE JULIO1A 32": "Av 20 De Julio",
+  "AV FRANCISCO NEWBAL": "Av Newball",
+  "AVE 20 DE JULIO N6 65": "Av 20 De Julio",
+  "BARRIO MORIS LANDING FRENTE A LA TIENDA EL PAISITA": "Morris Landing",
+  "AV LAS AMERICAS 5 ESQUINAS": "Av Las Americas 5 Esquinas",
+  "BARRIO LOS AMENDROS M3 C10": "Los Almendros",
+  "BARRIO BROOCK HILL FRENTE AL COLEGIO": "Brooks Hill",
+  "BARRIO PUTTY HILL FRENTE A LA CLINICA VILLARREAL": "Los Almendros",
+  "AV JUAN XXLLL": "Juan XXIII",
+  "CANTERAS": "Barrio Canteras",
+  "AVENIDAA 20 DE JULIO 4 71": "Av 20 De Julio",
+  "BARRIO ROC HOLLE": "Rock Hole",
+  "BARRIO RACK HOLE 21 63": "Rock Hole",
+  "BARRIO RACK HOLE": "Rock Hole",
+  "BRR ATLANTICO": "Barrio Atlantico"
  }
 }

@@ -8,7 +8,7 @@
  */
 
 export type Orden = "firma-desc" | "firma-asc" | "valor-desc" | "valor-asc";
-export type Vista = "mapa" | "contratos" | "editor";
+export type Vista = "mapa" | "contratos" | "editor" | "asignador";
 
 export interface Filtros {
   q: string;
@@ -34,7 +34,7 @@ const CLAVES: Record<keyof Filtros, string> = {
   minValor: "min", orden: "orden",
 };
 
-const VISTAS: Vista[] = ["contratos", "mapa", "editor"];
+const VISTAS: Vista[] = ["contratos", "mapa", "editor", "asignador"];
 const ORDENES: Orden[] = ["firma-desc", "firma-asc", "valor-desc", "valor-asc"];
 
 export function leerFiltros(sp: URLSearchParams): Filtros {

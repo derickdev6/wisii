@@ -242,6 +242,29 @@ Después de guardar, recalculá los datos:
 npm run data:build
 ```
 
+## El asignador de barrios
+
+Pestaña aparte, también solo local, para el trabajo en volumen: recorre **todos** los
+domicilios sin reconocer (955 textos distintos, no los 150 que muestra el editor) uno por
+uno, y para cada uno propone los barrios de nombre más parecido.
+
+Las sugerencias salen de [`lib/similitud.ts`](lib/similitud.ts), que compara **palabra por
+palabra** en vez de la cadena entera, porque el barrio suele venir enterrado en una
+dirección completa. Combina dos medidas porque fallan en casos distintos: Dice sobre
+trigramas capta inserciones y sufijos pero se cae con transposiciones —`BAIGTH` y `BIGHT`
+no comparten ni un trigrama— y Levenshtein normalizado sí las capta. Se toma la mayor.
+Una coincidencia literal marca 100% y, entre varias, gana la más larga: el mismo criterio
+del matcher de `build_data.py`.
+
+Lo que se elige se acumula en una bitácora de sesión, con «deshacer» por fila, y solo se
+escribe al pulsar Guardar, que agrega los alias y recalcula `public/data`. Si el texto no
+corresponde a ningún barrio existente, se puede crear uno nuevo sin coordenada y ubicarlo
+después en el editor.
+
+**Lo que el parecido de nombre no puede resolver:** los alias que son traducciones, no
+erratas. `SUR OESTE` es *South West Bay* y ninguna medida de similitud lo va a ver; para
+esos está el buscador manual de la derecha.
+
 `data/gazetteer.json` también se edita a mano sin problema: es un JSON plano con `barrios`
 (nombre → lat/lon/origen/isla) y `alias` (texto normalizado → barrio).
 
