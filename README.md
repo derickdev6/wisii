@@ -222,7 +222,13 @@ La pestaña **Editor de barrios** existe para eso:
 - La pestaña **Sin reconocer** lista los textos de domicilio que ningún alias captura, con
   su frecuencia. Asignalos a un barrio existente o creá uno nuevo ubicándolo en el mapa.
   Cada asignación sube la cobertura del mapa de calor.
-- **Guardar** escribe `data/gazetteer.json` directamente.
+- **Quitar ubicación** deja el barrio en el gazetteer con `lat`/`lon` en `null`. El alias
+  sigue reconociendo el domicilio, pero el barrio desaparece del mapa y sus contratos se
+  contabilizan aparte (`reconocido_sin_ubicacion`) en vez de mezclarse con los no
+  reconocidos. Sirve para los barrios cuya ubicación todavía no se conoce.
+- **Guardar** escribe `data/gazetteer.json` y **recalcula `public/data` automáticamente**
+  (~2 s). El mapa de calor lee `barrios.json`, no el gazetteer, así que sin ese paso una
+  edición no se vería reflejada.
 
 **El editor solo existe corriendo en local.** En Vercel el filesystem es de solo lectura,
 así que la pestaña no se muestra: `next.config.ts` resuelve

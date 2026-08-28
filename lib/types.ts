@@ -77,7 +77,8 @@ export interface BarrioFeature {
 
 export interface Gazetteer {
   _nota?: string;
-  barrios: Record<string, { lat: number; lon: number; src: string; isla?: string }>;
+  /** lat/lon en null: barrio reconocido cuya ubicación aún no se conoce */
+  barrios: Record<string, { lat: number | null; lon: number | null; src: string; isla?: string }>;
   alias: Record<string, string>;
 }
 

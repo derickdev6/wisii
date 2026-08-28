@@ -20,15 +20,15 @@
    "isla": "San Andrés"
   },
   "Vista Hermosa": {
-   "lat": 12.57935,
-   "lon": -81.71115,
-   "src": "osm-place",
+   "lat": 12.57787,
+   "lon": -81.70979,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Sound Bay": {
-   "lat": 12.51544,
-   "lon": -81.71852,
-   "src": "osm-place",
+   "lat": 12.52068,
+   "lon": -81.71391,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Morris Landing": {
@@ -44,9 +44,9 @@
    "isla": "San Andrés"
   },
   "Tom Hooker": {
-   "lat": 12.57053,
-   "lon": -81.71537,
-   "src": "osm-place",
+   "lat": 12.50594,
+   "lon": -81.72025,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Swamp Ground": {
@@ -116,15 +116,15 @@
    "isla": "San Andrés"
   },
   "Flowers Hill": {
-   "lat": 12.57194,
-   "lon": -81.71445,
-   "src": "osm-place",
+   "lat": 12.57149,
+   "lon": -81.71347,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Sprat Bight": {
-   "lat": 12.58705,
-   "lon": -81.69522,
-   "src": "osm-place",
+   "lat": 12.5859,
+   "lon": -81.69696,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Punta Hansa": {
@@ -134,27 +134,27 @@
    "isla": "San Andrés"
   },
   "Brooks Hill": {
-   "lat": 12.56017,
-   "lon": -81.72951,
-   "src": "osm-place",
+   "lat": 12.56833,
+   "lon": -81.71532,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Natania": {
-   "lat": 12.5765,
-   "lon": -81.706,
-   "src": "aprox",
+   "lat": 12.58199,
+   "lon": -81.70962,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Sarie Bay": {
-   "lat": 12.5875,
-   "lon": -81.7055,
-   "src": "aprox",
+   "lat": 12.59024,
+   "lon": -81.7044,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "North End": {
-   "lat": 12.5835,
-   "lon": -81.7005,
-   "src": "aprox",
+   "lat": 12.58301,
+   "lon": -81.69614,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Perry Hill": {
@@ -164,15 +164,15 @@
    "isla": "San Andrés"
   },
   "Back Road": {
-   "lat": 12.548,
-   "lon": -81.7215,
-   "src": "aprox",
+   "lat": 12.57994,
+   "lon": -81.70759,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "School House": {
-   "lat": 12.5645,
-   "lon": -81.714,
-   "src": "aprox",
+   "lat": 12.58455,
+   "lon": -81.7048,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Rock Hole": {
@@ -188,45 +188,45 @@
    "isla": "San Andrés"
   },
   "Las Gaviotas": {
-   "lat": 12.582,
-   "lon": -81.706,
-   "src": "aprox",
+   "lat": 12.57926,
+   "lon": -81.70474,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Las Palmas": {
-   "lat": 12.58,
-   "lon": -81.7045,
-   "src": "aprox",
+   "lat": 12.57852,
+   "lon": -81.71026,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Barrack": {
-   "lat": 12.55439,
-   "lon": -81.71746,
-   "src": "aprox",
+   "lat": 12.54975,
+   "lon": -81.71574,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "The Cove": {
-   "lat": 12.535,
-   "lon": -81.727,
-   "src": "aprox",
+   "lat": 12.53244,
+   "lon": -81.72879,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Orange Hill": {
-   "lat": 12.5455,
-   "lon": -81.723,
-   "src": "aprox",
+   "lat": 12.55992,
+   "lon": -81.71247,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Schooner Bight": {
-   "lat": 12.558,
-   "lon": -81.702,
-   "src": "aprox",
+   "lat": 12.54749,
+   "lon": -81.72954,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Slave Hill": {
-   "lat": 12.56,
-   "lon": -81.715,
-   "src": "aprox",
+   "lat": 12.57798,
+   "lon": -81.71108,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Cocal": {
@@ -236,15 +236,15 @@
    "isla": "San Andrés"
   },
   "Buenos Aires": {
-   "lat": 12.577,
-   "lon": -81.7085,
-   "src": "aprox",
+   "lat": 12.57956,
+   "lon": -81.71176,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Serranilla": {
-   "lat": 12.579,
-   "lon": -81.703,
-   "src": "aprox",
+   "lat": 12.5843,
+   "lon": -81.70676,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Modelo": {
@@ -254,9 +254,9 @@
    "isla": "San Andrés"
   },
   "Los Almendros": {
-   "lat": 12.57775,
-   "lon": -81.70129,
-   "src": "aprox",
+   "lat": 12.57694,
+   "lon": -81.70227,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Little Hill": {
@@ -272,9 +272,9 @@
    "isla": "San Andrés"
   },
   "Elsy Bar": {
-   "lat": 12.5825,
-   "lon": -81.7045,
-   "src": "aprox",
+   "lat": 12.49447,
+   "lon": -81.72195,
+   "src": "manual",
    "isla": "San Andrés"
   },
   "Aguas Mansas": {

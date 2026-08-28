@@ -194,7 +194,8 @@ def main():
     asignado = [match(r["domicilio"]) for r in rows]
     # el denominador honesto son los contratos que traen el campo (solo SECOP II)
     mapeables = [r for r in rows if r["fuente"] == SECOP2]
-    con_barrio = sum(1 for b in asignado if b)
+    # domicilios que un alias reconoció, tengan o no coordenada conocida
+    reconocidos = sum(1 for b in asignado if b)
     sin_dato = sum(1 for r in mapeables if norm(r["domicilio"]) in VACIO)
     no_match = sum(1 for r, b in zip(rows, asignado)
                    if r["fuente"] == SECOP2 and b is None and norm(r["domicilio"]) not in VACIO)
@@ -255,11 +256,21 @@ def main():
               ensure_ascii=False, separators=(",", ":"))
 
     # --- agregado por barrio (una feature por barrio; el peso lo da el heatmap) ---
+    # Un barrio puede estar en el gazetteer sin coordenada: el alias sigue
+    # reconociendo el domicilio, pero no se puede dibujar. Esos contratos se
+    # cuentan aparte en vez de mezclarse con los no reconocidos.
+    ubicado = lambda b: (barrios_geo[b].get("lat") is not None
+                         and barrios_geo[b].get("lon") is not None)
     agg = defaultdict(lambda: {"n": 0, "valor": 0})
+    sin_ubicacion = 0
     for r, b in zip(rows, asignado):
-        if b:
+        if not b:
+            continue
+        if ubicado(b):
             agg[b]["n"] += 1
             agg[b]["valor"] += r["valor"]
+        else:
+            sin_ubicacion += 1
 
     # Providencia se dibuja junto a San Andrés (ver scripts/fetch_geo.py): los
     # barrios de esa isla se desplazan con el mismo vector para que caigan sobre
@@ -267,6 +278,8 @@ def main():
     # lo que usa el editor sobre imagen satelital.
     islas = json.load(open(os.path.join(DATA, "islas.geojson"), encoding="utf-8"))
     dlon, dlat = islas["properties"]["offsetProvidencia"]
+
+    con_barrio = sum(a["n"] for a in agg.values())
 
     feats = []
     for b, a in sorted(agg.items(), key=lambda kv: -kv[1]["n"]):
@@ -313,6 +326,9 @@ def main():
             "mapeables": len(mapeables),        # solo SECOP II trae domicilio
             "sin_dato": sin_dato,
             "no_reconocido": no_match,
+            "reconocidos": reconocidos,
+            "reconocido_sin_ubicacion": sin_ubicacion,
+            "barrios_sin_ubicacion": sum(1 for b in barrios_geo if not ubicado(b)),
             "cobertura": round(con_barrio / len(mapeables), 4) if mapeables else 0,
             "cobertura_total": round(con_barrio / len(rows), 4),
             "barrios_ubicados": len(agg),

@@ -1,5 +1,7 @@
+import { execFile } from "node:child_process";
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { promisify } from "node:util";
 import { NextResponse } from "next/server";
 import type { Gazetteer } from "@/lib/types";
 
@@ -13,6 +15,24 @@ const BBOX = {
 
 /** true cuando corre en Vercel, donde el filesystem es de solo lectura. */
 const soloLectura = () => Boolean(process.env.VERCEL);
+
+const ejecutar = promisify(execFile);
+
+/**
+ * Regenera public/data tras guardar. El mapa de calor lee barrios.json, no el
+ * gazetteer, así que sin este paso una edición no se ve reflejada hasta correr
+ * el script a mano. Tarda ~2 s sobre el CSV completo.
+ */
+async function recalcular(): Promise<string | null> {
+  try {
+    await ejecutar("python3", ["scripts/build_data.py"], {
+      cwd: process.cwd(), timeout: 120_000, maxBuffer: 8 * 1024 * 1024,
+    });
+    return null;
+  } catch (e) {
+    return e instanceof Error ? e.message : String(e);
+  }
+}
 
 export async function GET() {
   const gaz = JSON.parse(await fs.readFile(RUTA, "utf-8")) as Gazetteer;
@@ -39,8 +59,12 @@ export async function POST(req: Request) {
   }
 
   for (const [nombre, b] of Object.entries(body.barrios)) {
+    // lat/lon en null = barrio reconocido cuya ubicación todavía no se conoce
+    if (b?.lat == null && b?.lon == null) continue;
     if (typeof b?.lat !== "number" || typeof b?.lon !== "number") {
-      return NextResponse.json({ error: `'${nombre}' no tiene lat/lon numéricos` }, { status: 400 });
+      return NextResponse.json(
+        { error: `'${nombre}' debe tener lat y lon numéricos, o ambos en null` },
+        { status: 400 });
     }
     const isla = (b.isla ?? "San Andrés") as keyof typeof BBOX;
     const caja = BBOX[isla];
@@ -61,9 +85,17 @@ export async function POST(req: Request) {
   }
 
   await fs.writeFile(RUTA, JSON.stringify(body, null, 1) + "\n", "utf-8");
+
+  const fallo = await recalcular();
+  const sinUbicar = Object.values(body.barrios)
+    .filter((b) => b.lat == null || b.lon == null).length;
+
   return NextResponse.json({
     ok: true,
     barrios: Object.keys(body.barrios).length,
     alias: Object.keys(body.alias).length,
+    sinUbicar,
+    recalculado: fallo === null,
+    error: fallo,
   });
 }

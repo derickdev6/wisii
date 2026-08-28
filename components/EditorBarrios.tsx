@@ -144,6 +144,12 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
 
     for (const nombre of nombres) {
       const b = gaz.barrios[nombre];
+      // sin coordenada no hay nada que dibujar
+      if (b.lat == null || b.lon == null) {
+        const m = marcadores.current.get(nombre);
+        if (m) { m.remove(); marcadores.current.delete(nombre); }
+        continue;
+      }
       const activo = sel === nombre;
       const n = porBarrio[nombre] ?? 0;
       let m = marcadores.current.get(nombre);
@@ -198,6 +204,18 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
     setMsg({ tipo: "ok", texto: `Creado «${nombre}» y alias «${alias}»` });
   }
 
+  /** Deja el barrio en el gazetteer pero sin ubicación: los alias siguen
+   *  reconociendo el domicilio y el contrato deja de contarse en el mapa. */
+  function quitarUbicacion(nombre: string) {
+    setGaz((g) => g && ({
+      ...g,
+      barrios: { ...g.barrios, [nombre]: {
+        ...g.barrios[nombre], lat: null, lon: null, src: "sin-ubicar" } },
+    }));
+    setSucio(true);
+    setMsg({ tipo: "ok", texto: `«${nombre}» queda sin ubicación; su alias sigue activo.` });
+  }
+
   function asignarAlias(alias: string, barrio: string) {
     setGaz((g) => g && ({ ...g, alias: { ...g.alias, [alias]: barrio } }));
     setSucio(true);
@@ -207,7 +225,9 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
   function irA(nombre: string) {
     const b = gaz?.barrios[nombre];
     setSel(nombre);
-    if (b) mapRef.current?.flyTo({ center: [b.lon, b.lat], zoom: 15.5, duration: 700 });
+    if (b && b.lat != null && b.lon != null) {
+      mapRef.current?.flyTo({ center: [b.lon, b.lat], zoom: 15.5, duration: 700 });
+    }
   }
 
   async function guardar() {
@@ -219,7 +239,11 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
     const d = await r.json();
     if (r.ok) {
       setSucio(false);
-      setMsg({ tipo: "ok", texto: `Guardado: ${d.barrios} barrios, ${d.alias} alias. Corré «npm run data:build» para recalcular.` });
+      setMsg(d.recalculado
+        ? { tipo: "ok", texto: `Guardado y recalculado: ${d.barrios} barrios, ${d.alias} alias`
+            + (d.sinUbicar ? `, ${d.sinUbicar} sin ubicar` : "")
+            + ". El mapa de calor ya refleja los cambios." }
+        : { tipo: "error", texto: `Guardado, pero el recálculo falló (${d.error}). Corré «npm run data:build» a mano.` });
     } else {
       setMsg({ tipo: "error", texto: d.error ?? "Error al guardar" });
     }
@@ -240,10 +264,17 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
     const f = filtro.toLowerCase();
     return nombres
       .filter((n) => !f || n.toLowerCase().includes(f))
-      .sort((a, b) => (porBarrio[b] ?? 0) - (porBarrio[a] ?? 0) || a.localeCompare(b));
+      // los que no tienen coordenada van al final, para que no estorben
+      .sort((a, b) => {
+        const ua = gaz.barrios[a].lat == null ? 1 : 0;
+        const ub = gaz.barrios[b].lat == null ? 1 : 0;
+        return ua - ub || (porBarrio[b] ?? 0) - (porBarrio[a] ?? 0) || a.localeCompare(b);
+      });
   }, [gaz, nombres, filtro, porBarrio]);
 
   const aprox = nombres.filter((n) => gaz?.barrios[n].src === "aprox").length;
+  const sinUbicar = nombres.filter(
+    (n) => gaz?.barrios[n].lat == null || gaz?.barrios[n].lon == null).length;
   const enOtraIsla = todos.length - nombres.length;
 
   if (!gaz) return <div className="p-8 text-sm" style={{ color: "var(--muted)" }}>Cargando gazetteer…</div>;
@@ -277,16 +308,29 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
         </div>
 
         {(sel || creando) && (
-          <div className="absolute bottom-3 left-3 right-3 rounded-lg border px-3 py-2 text-xs backdrop-blur"
+          <div className="absolute bottom-8 left-3 right-3 rounded-lg border px-3 py-2 text-xs backdrop-blur"
                style={{ borderColor: "var(--accent)", background: "color-mix(in srgb, var(--surface) 92%, transparent)" }}>
             {creando ? (
               <>Hacé clic en el mapa para ubicar <strong>{creando.nombre}</strong>{" "}
                 <button onClick={() => setCreando(null)} className="ml-2 underline" style={{ color: "var(--muted)" }}>cancelar</button></>
             ) : (
-              <>Editando <strong>{sel}</strong> — hacé clic en el mapa o arrastrá el punto para reubicarlo.{" "}
-                <span className="num" style={{ color: "var(--muted)" }}>
-                  {gaz.barrios[sel!]?.lat.toFixed(5)}, {gaz.barrios[sel!]?.lon.toFixed(5)}
-                </span></>
+              <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                {gaz.barrios[sel!]?.lat == null ? (
+                  <>Sin ubicación conocida: hacé clic en el mapa para ubicar{" "}
+                    <strong>{sel}</strong>.</>
+                ) : (
+                  <>Editando <strong>{sel}</strong> — clic en el mapa o arrastrá el punto.{" "}
+                    <span className="num" style={{ color: "var(--muted)" }}>
+                      {gaz.barrios[sel!]!.lat!.toFixed(5)}, {gaz.barrios[sel!]!.lon!.toFixed(5)}
+                    </span>
+                    <button onClick={() => quitarUbicacion(sel!)}
+                            className="rounded-md border px-2 py-0.5"
+                            style={{ borderColor: "var(--coral)", color: "var(--coral)" }}>
+                      Quitar ubicación
+                    </button>
+                  </>
+                )}
+              </span>
             )}
           </div>
         )}
@@ -309,6 +353,7 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
           <div className="mt-2 flex flex-wrap gap-1.5">
             <Chip>{nombres.length} barrios</Chip>
             <Chip tono={aprox ? "alerta" : "ok"}>{aprox} aproximados</Chip>
+            {sinUbicar > 0 && <Chip tono="alerta">{sinUbicar} sin ubicar</Chip>}
             <Chip>{Object.keys(gaz.alias).length} alias</Chip>
             <Chip>{enOtraIsla} en la otra isla</Chip>
           </div>
@@ -353,7 +398,9 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
                     <span className="min-w-0">
                       <span className="block truncate text-xs font-medium">{n}</span>
                       <span className="num text-[10px]" style={{ color: "var(--muted)" }}>
-                        {b.lat.toFixed(4)}, {b.lon.toFixed(4)}
+                        {b.lat != null && b.lon != null
+                          ? `${b.lat.toFixed(4)}, ${b.lon.toFixed(4)}`
+                          : "sin ubicación"}
                       </span>
                     </span>
                     <span className="flex shrink-0 items-center gap-1.5">
@@ -362,8 +409,12 @@ export default function EditorBarrios({ meta }: { meta: Meta }) {
                           {numero(porBarrio[n])}
                         </span>
                       ) : null}
-                      <Chip tono={b.src === "aprox" ? "alerta" : b.src === "manual" ? "ok" : "neutro"}>
-                        {b.src === "osm-place" ? "OSM" : b.src === "manual" ? "editado" : "aprox"}
+                      <Chip tono={b.lat == null ? "alerta"
+                                  : b.src === "aprox" ? "alerta"
+                                  : b.src === "manual" ? "ok" : "neutro"}>
+                        {b.lat == null ? "sin ubicar"
+                         : b.src === "osm-place" ? "OSM"
+                         : b.src === "manual" ? "editado" : "aprox"}
                       </Chip>
                     </span>
                   </button>
